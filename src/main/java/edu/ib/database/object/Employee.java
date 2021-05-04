@@ -1,11 +1,10 @@
-package edu.ib.object;
+package edu.ib.database.object;
 
-import edu.ib.ClassDatabaseMapper;
-import org.graalvm.compiler.lir.EdgeMoveOptimizer;
+import edu.ib.database.DatabaseMappable;
 
 import java.time.LocalDate;
 
-public class Employee {
+public class Employee implements DatabaseMappable {
 
     private Integer id;
     private String name;

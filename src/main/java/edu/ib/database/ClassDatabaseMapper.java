@@ -1,4 +1,4 @@
-package edu.ib;
+package edu.ib.database;
 
 
 
@@ -8,10 +8,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class ClassDatabaseMapper<T> {
+public class ClassDatabaseMapper<T extends DatabaseMappable> {
 
     private Class<T> tClass;
 
@@ -23,11 +25,12 @@ public class ClassDatabaseMapper<T> {
     public List<T> getObject(ResultSet resultSet) throws SQLException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
         List<T> list=new ArrayList<>();
 
-        Field[] classFields= tClass.getFields();
+        Field[] classFields= tClass.getDeclaredFields();
         int [] columnsId=new int[classFields.length];
         //Method[] methodsList=new Method[classFields.length];
         for(int i=0;i<classFields.length;i++){
             try {
+                classFields[i].setAccessible(true);
                 columnsId[i] = resultSet.findColumn(classFields[i].getName());
             } catch(SQLException e){
                 e.getStackTrace();
@@ -40,24 +43,25 @@ public class ClassDatabaseMapper<T> {
             T temp= (T) tClass.getConstructor().newInstance();
             for(int i=0;i<columnsId.length;i++){
                 if(columnsId[i]!=-1){
-                    switch (classFields[columnsId[i]].getClass().getName()){
+                    String test=classFields[i].getType().getSimpleName();
+                    switch (classFields[i].getType().getSimpleName()){
                         case "Integer":
-                            classFields[columnsId[i]].set(temp,resultSet.getInt(columnsId[i]));
+                            classFields[i].set(temp,resultSet.getInt(columnsId[i]));
                             break;
                         case "String":
-                            classFields[columnsId[i]].set(temp,resultSet.getString(columnsId[i]));
+                            classFields[i].set(temp,resultSet.getString(columnsId[i]));
                             break;
                         case "Double":
-                            classFields[columnsId[i]].set(temp,resultSet.getDouble(columnsId[i]));
+                            classFields[i].set(temp,resultSet.getDouble(columnsId[i]));
                             break;
                         case "Boolean":
-                            classFields[columnsId[i]].set(temp,resultSet.getBoolean(columnsId[i]));
+                            classFields[i].set(temp,resultSet.getBoolean(columnsId[i]));
                             break;
                         case "LocalDate":
-                            classFields[columnsId[i]].set(temp, LocalDate.parse(resultSet.getDate(columnsId[i]).toString()));
+                            classFields[i].set(temp, LocalDate.parse(resultSet.getDate(columnsId[i]).toString()));
                             break;
                         case "LocalDateTime":
-                            classFields[columnsId[i]].set(temp, LocalDateTime.parse(resultSet.getDate(columnsId[i]).toString()));
+                            classFields[i].set(temp, LocalDateTime.parse(resultSet.getTimestamp(columnsId[i]).toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.n")));
                             break;
                         default:
                             throw new IllegalArgumentException("Błąd klasy");
