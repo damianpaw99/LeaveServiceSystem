@@ -1,22 +1,25 @@
-package edu.ib.object;
+package edu.ib.database.object;
+
+import edu.ib.database.DatabaseMappable;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-public class Leave {
+public class Leave implements DatabaseMappable {
 
+    private int id;
     private String employeeName;
     private String employeeSurname;
     private LocalDate startDate;
     private LocalDate endDate;
-    private LocalDate statusDate;
+    private LocalDateTime statusDate;
     private String status;
-
 
 
     public Leave(){
     }
 
-    public Leave(String employeeName, String employeeSurname, LocalDate startDate, LocalDate endDate, LocalDate statusDate, String status) {
+    public Leave(String employeeName, String employeeSurname, LocalDate startDate, LocalDate endDate, LocalDateTime statusDate, String status) {
         if(employeeName.isEmpty() || employeeName.length()>50) throw new IllegalArgumentException("Wrong employeeName: "+employeeName);
         if(employeeSurname.isEmpty() || employeeSurname.length()>50) throw new IllegalArgumentException("Wrong employeeName: "+employeeName);
         this.employeeName = employeeName;
@@ -61,11 +64,11 @@ public class Leave {
         this.endDate = endDate;
     }
 
-    public LocalDate getStatusDate() {
+    public LocalDateTime getStatusDate() {
         return statusDate;
     }
 
-    public void setStatusDate(LocalDate statusDate) {
+    public void setStatusDate(LocalDateTime statusDate) {
         this.statusDate = statusDate;
     }
 
