@@ -35,7 +35,7 @@
           <a class="nav-link" href="index.html">Strona główna
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item">`
           <a class="nav-link" href="login.jsp">Logowanie
           </a>
         </li>
@@ -91,6 +91,12 @@
         <input type="text" class="form-control" name="loginInput" id="login" placeholder="Utwórz login">
       </div>
 
+      <div class="form-group has-danger">
+        <label class="form-control-label" for="wrongLogin">Login</label>
+        <input type="text" value="błędny login" class="form-control is-invalid" id="wrongLogin">
+        <div class="invalid-feedback">Użytkownik o takim loginie już istnieje. Wprowadź inny login.</div>
+      </div>
+
       <div class="form-group">
         <label for="passwordInput">Hasło</label>
         <input type="password" class="form-control" name="passwordInput" id="passwordInput"
@@ -101,6 +107,12 @@
         <label for="repeadPassword">Ponowne wprowadzenie hasła</label>
         <input type="password" class="form-control" name="repeadPassword" id="repeadPassword"
                placeholder="Ponownie wprowadź to samo hasło">
+      </div>
+
+      <div class="form-group has-danger">
+        <label class="form-control-label" for="wrongPassword">Ponowne wprowadzenie hasła</label>
+        <input type="text" value="błędne hasło" class="form-control is-invalid" id="wrongPassword">
+        <div class="invalid-feedback">Błędne hasło.</div>
       </div>
 
       <button type="submit" class="btn btn-primary">UTWÓRZ KONTO</button>
