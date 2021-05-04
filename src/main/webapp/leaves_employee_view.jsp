@@ -21,46 +21,34 @@
         <div class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="index.html">Strona główna
+                    <a class="nav-link" href="index_employee_view.html">Strona główna
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="login.jsp">Logowanie
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="registration.jsp">Rejestracja
-                    </a>
-                </li>
-                <li class="nav-item active">
                     <a class="nav-link" href="leave_form.jsp">Zaplanuj urlop</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Przeglądaj urlopy</a>
+                    <a class="nav-link" href="leaves_employee_view.jsp">Przeglądaj urlopy</a>
                 </li>
             </ul>
-
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Wyloguj</button>
         </div>
     </nav>
 </header>
 
 <main>
-    <div class="row form-group"></div>
-    <div class="row form-group"></div>
-    <div class="row form-group"></div>
-    <div class="row form-group"></div>
 
-
-    <table class="table table-striped" style="font-size:11px; text-align:center;">
+    <table class="table table-striped" style="font-size:14px; text-align:center;">
 
         <thead>
-        <tr>
-            <th scope="col" style="font-size:11px;" >#</th>
-            <th scope="col" style="font-size:11px;">Data rozpoczecia</th>
-            <th scope="col" style="font-size:11px;">Data zakończenia</th>
-            <th scope="col" style="font-size:11px;">Status</th>
-            <th scope="col" style="font-size:11px;">Zmień datę</th>
-            <th scope="col" style="font-size:11px;">Zrezygnuj</th>
+        <tr class="table-light">
+            <th scope="col" >#</th>
+            <th scope="col" >Data rozpoczecia</th>
+            <th scope="col" >Data zakończenia</th>
+            <th scope="col" >Zmiana statusu</th>
+            <th scope="col" >Status</th>
+            <th scope="col" >Zmień datę</th>
+            <th scope="col" >Zrezygnuj</th>
         </tr>
         </thead>
         <tbody>
@@ -81,6 +69,7 @@
                 <th scope="row">${tmpLeave.id}</th>
                 <td>${tmpLeave.startDate}</td>
                 <td>${tmpLeave.endDate}</td>
+                <td>${tmpLeave.statusDate}</td>
                 <td>${tmpLeave.status}</td>
                 <td><a href="${updateLink}">
                     <button type="button" class="btn btn-warning">Modyfikuj</button>

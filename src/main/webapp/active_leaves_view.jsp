@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Wszystkie urlopty pracowników</title>
+    <title>Wnioski</title>
     <link rel="shortcut icon" type="image/png" href="images/favicon.png"/>
     <link rel="stylesheet" href="css/bootstrap.css">
 </head>
@@ -24,11 +24,11 @@
                     <a class="nav-link" href="index_manager_view.html">Strona główna
                     </a>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="leaves_manager_view.jsp">Wszystkie urlopy</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="active_leaves_view.jsp">Złożone wnioski</a>
+                <li class="nav-item active">
+                    <a class="nav-link" href="active_leaves_view.jsp">Wnioski do rozpatrzenia</a>
                 </li>
             </ul>
             <button class="btn btn-secondary my-2 my-sm-0" type="submit">Wyloguj</button>
@@ -37,11 +37,10 @@
 </header>
 
 <main>
-
     <table class="table table-striped" style="font-size:14px; text-align:center;">
 
         <thead>
-        <tr class="table-active">
+        <tr class="table-primary">
             <th scope="col" >#</th>
             <th scope="col" >Imię pracownika</th>
             <th scope="col" >Nazwisko pracownika</th>
@@ -49,12 +48,24 @@
             <th scope="col" >Data zakończenia</th>
             <th scope="col" >Zmiana statusu</th>
             <th scope="col" >Status</th>
+            <th scope="col" >Akcje</th>
+
         </tr>
         </thead>
+
         <tbody>
 
         <c:forEach var="tmpLeave" items="${LEAVES_LIST}">
 
+            <c:url var="acceptLink" value="LeavesServlet">
+                <c:param name="command" value="UPDATE"></c:param>
+                <c:param name="leaveID" value="${tmpLeave.id}"></c:param>
+            </c:url>
+
+            <c:url var="declineLink" value="LeavesServlet">
+                <c:param name="command" value="UPDATE"></c:param>
+                <c:param name="leaveID" value="${tmpLeave.id}"></c:param>
+            </c:url>
 
             <tr>
                 <th scope="row">${tmpLeave.id}</th>
@@ -64,6 +75,12 @@
                 <td>${tmpLeave.endDate}</td>
                 <td>${tmpLeave.statusDate}</td>
                 <td>${tmpLeave.status}</td>
+                <td><a href="${updateLink}">
+                    <button type="button" class="btn btn-success">Zaakceptuj</button>
+                </a>
+                    <a href="${deleteLink}">
+                        <button type="button" class="btn btn-danger">Odrzuć</button>
+                    </a></td>
             </tr>
 
         </c:forEach>
