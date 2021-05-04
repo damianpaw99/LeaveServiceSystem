@@ -26,25 +26,17 @@
         <div class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="index.html">Strona główna
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="login.jsp">Logowanie
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="registration.jsp">Rejestracja
+                    <a class="nav-link" href="index_employee_view.html">Strona główna
                     </a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="leave_form.jsp">Zaplanuj urlop</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Przeglądaj urlopy</a>
+                    <a class="nav-link" href="leaves_employee_view.jsp">Przeglądaj urlopy</a>
                 </li>
             </ul>
-
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Wyloguj</button>
         </div>
     </nav>
 </header>
@@ -53,7 +45,9 @@
     <div class="jumbotron">
         <div class="container">
             <h3>Wniosek o urlop</h3>
+
             <div class="row form-group"></div>
+            <p class="text-info">Pozostało ci ${tutaj.liczba.dni} dni urlopu do wykorzystania.</p>
 
             <form action="AdminServlet" method="post">
 
@@ -68,7 +62,7 @@
 
                 <p class="text-danger">Zaplanowano zbyt długi urlop. Masz mniej dni do dyspozycji.</p>
 
-                <button type="submit" class="btn btn-primary">Wyślij</button>
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Wyślij</button>
 
                 <div class="row form-group"></div>
                 <div class="row form-group"></div>

@@ -12,14 +12,16 @@
 
     <link rel="shortcut icon" type="image/png" href="images/favicon.png"/>
     <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/split.css">
 </head>
 
 <body>
 
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">AnDamPol</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+        <a href="#" class="navbar-brand">AnDamPol</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+                aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -37,49 +39,48 @@
                     <a class="nav-link" href="registration.jsp">Rejestracja
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="leave_form.jsp">Zaplanuj urlop</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Przeglądaj urlopy</a>
-                </li>
             </ul>
-
         </div>
     </nav>
 </header>
 
 <main>
-    <div class="jumbotron">
+    <div class="split left">
         <div class="container">
-            <h3>Logowanie</h3>
-            <div class="row form-group"></div>
+            <div class="centered">
+                <form action="AdminServlet" method="post">
 
-            <form action="AdminServlet" method="post">
+                    <h3>Logowanie:</h3>
 
-                <div class="form-group">
-                    <label for="login">Login</label>
-                    <input type="text" class="form-control" name="loginInput" id="login" placeholder="Wprowadź login">
-                </div>
-                <div class="form-group">
-                    <label for="password">Hasło</label>
-                    <input type="password" class="form-control" name="passwordInput" id="password"
-                           placeholder="Wprowadź hasło">
-                </div>
+                    <div class="row form-group"></div>
 
-                <p class="text-danger">Błędny login lub hasło.</p>
+                    <div class="form-group">
+                        <label for="login">Login</label>
+                        <input type="text" class="form-control" name="loginInput" id="login"
+                               placeholder="Wprowadź login">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Hasło</label>
+                        <input type="password" class="form-control" name="passwordInput" id="password"
+                               placeholder="Wprowadź hasło">
+                    </div>
 
-                <button type="submit" class="btn btn-primary">Zaloguj</button>
+                    <p class="text-danger">Błędny login lub hasło.</p>
 
-                <div class="row form-group"></div>
-                <div class="row form-group"></div>
-
-                <h4 class="text-info">Nie masz konta? Zarejestruj się.</h4>
-                <button type="button" class="btn btn-info" href="registration.html">Załóż konto</button>
-            </form>
-
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Zaloguj</button>
+                </form>
+            </div>
         </div>
     </div>
+    <div class="vl centered"></div>
+
+    <div class="split right">
+        <div class="centered">
+            <h4 class="text-warning">Nie masz konta? Zarejestruj się.</h4>
+            <button type="button" class="btn btn-warning btn-lg btn-block" href="registration.html">Załóż konto</button>
+        </div>
+    </div>
+
 </main>
 
 </body>
