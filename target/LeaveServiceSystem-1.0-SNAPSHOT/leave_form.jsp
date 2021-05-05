@@ -19,7 +19,8 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="leaves_employee_view.jsp">BiteOfRest</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+                aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -32,56 +33,77 @@
                     <a class="nav-link" href="leaves_employee_view.jsp">Przeglądaj urlopy</a>
                 </li>
             </ul>
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Wyloguj</button>
+            <form action="LeaveServlet" method="get">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit" >Wyloguj</button>
+            </form>
         </div>
     </nav>
 </header>
 
 <main>
 
-        <div class="container">
+    <div class="container">
+
+        <div class="row form-group"></div>
+        <div class="row form-group"></div>
+        <div class="row form-group"></div>
+        <div class="row form-group"></div>
+        <div class="row form-group"></div>
+
+        <div class="jumbotron">
 
             <div class="row form-group"></div>
-            <div class="row form-group"></div>
-            <div class="row form-group"></div>
-            <div class="row form-group"></div>
-            <div class="row form-group"></div>
-
-            <div class="jumbotron">
-
-                <div class="row form-group"></div>
 
             <h3>Wniosek o urlop</h3>
 
             <div class="row form-group"></div>
 
-            <p class="text-info">Pozostało ci ${tutaj.liczba.dni} dni urlopu do wykorzystania.</p>
+            <%--            <p class="text-info">Pozostało ci ${tutaj.liczba.dni} dni urlopu do wykorzystania.</p>--%>
 
-            <form action="AdminServlet" method="post">
+            <form action="LeaveServlet" method="post">
 
-                <div class="form-group">
-                    <label for="startDate">Dzień rozpoczęcia</label>
-                    <input type="date" class="form-control" name="startDateInput" id="startDate">
-                </div>
 
-                <div class="form-group has-danger">
-                    <label class="form-control-label" for="wrongStartDate">Dzień rozpoczęcia</label>
-                    <input type="date" value="" class="form-control is-invalid" id="wrongStartDate">
-                    <div class="invalid-feedback">Podpis</div>
-                </div>
+                <%
+                    String sStart = (String) request.getAttribute("startError");
+                    if (sStart != null) {
+                        out.println("                <div class=\"form-group has-danger\">\n" +
+                                "                    <label class=\"form-control-label\" for=\"wrongStartDate\">Dzień rozpoczęcia</label>\n" +
+                                "                    <input type=\"date\" value=\"${param.startDateInput!=null ? param.startDateInput:\"\"}\" class=\"form-control is-invalid\" id=\"wrongStartDate\" name=\"startDateInput\">\n" +
+                                "                    <div class=\"invalid-feedback\">" + sStart + "</div>\n" +
+                                "                </div>");
+                    } else {
+                        out.println("                <div class=\"form-group\">\n" +
+                                "                    <label for=\"startDate\">Dzień rozpoczęcia</label>\n" +
+                                "                    <input type=\"date\" class=\"form-control\" value=\"${param.startDateInput!=null ? param.startDateInput:\"\"}\" name=\"startDateInput\" id=\"startDate\">\n" +
+                                "                </div>");
+                    }
+                %>
 
-                <div class="form-group">
-                    <label for="endDate">Dzień zakończenia</label>
-                    <input type="date" class="form-control" name="endDateInput" id="endDate">
-                </div>
+                <%
+                    String sEnd = (String) request.getAttribute("endError");
+                    if (sEnd != null) {
+                        out.println("                <div class=\"form-group has-danger\">\n" +
+                                "                    <label class=\"form-control-label\" for=\"wrongEndDate\">Dzień rozpoczęcia</label>\n" +
+                                "                    <input type=\"text\" value=\"${param.endDateInput!=null ? param.endDateInput:\"\"}\" class=\"form-control is-invalid\" name=\"endDateInput\" id=\"wrongEndDate\">\n" +
+                                "                    <div class=\"invalid-feedback\">" + sEnd + "</div>\n" +
+                                "                </div>");
+                    } else {
+                        out.println("                <div class=\"form-group\">\n" +
+                                "                    <label for=\"endDate\">Dzień zakończenia</label>\n" +
+                                "                    <input type=\"date\" class=\"form-control\" value=\"${param.endDateInput!=null ? param.endDateInput:\"\"}\" name=\"endDateInput\" id=\"endDate\">\n" +
+                                "                </div>");
+                    }
+                %>
 
-                <div class="form-group has-danger">
-                    <label class="form-control-label" for="wrongEndDate">Dzień rozpoczęcia</label>
-                    <input type="text" value="" class="form-control is-invalid" id="wrongEndDate">
-                    <div class="invalid-feedback">podpis</div>
-                </div>
 
-                <p class="text-danger">Zaplanowano zbyt długi urlop. Masz mniej dni do dyspozycji.</p>
+                <p class="text-danger">
+                    <%
+                    String sOther=(String) request.getAttribute("otherError");
+                    if(sOther!=null){
+                        out.println(sOther);
+                    }
+                    %>
+                </p>
 
                 <button type="submit" class="btn btn-primary btn-lg btn-block">Wyślij</button>
 

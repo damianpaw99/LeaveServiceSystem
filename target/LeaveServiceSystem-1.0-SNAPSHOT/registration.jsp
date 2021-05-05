@@ -45,115 +45,110 @@
                 <fieldset>
                     <legend>Utwórz nowe konto pracownika</legend>
 
-                    <div class="form-group">
-                        <label class="col-form-label" for="inputFirstName">Imię</label>
-                        <input type="text" class="form-control" placeholder="Wprowadź imię" name="inputFirstName"
-                               id="inputFirstName">
-                    </div>
-
                     <%
-                        String sName=(String)request.getAttribute("nameError");
-                        if(sName!=null){
-                            out.println("<div class=\"form-group has-danger\">\n" +
-                                    "                        <label class=\"form-control-label\" for=\"wrongFirstName\">Imię</label>\n" +
-                                    "                        <input type=\"text\" value=\"\" class=\"form-control is-invalid\" id=\"wrongFirstName\">\n" +
-                                    "                        <div class=\"invalid-feedback\">"+sName+"</div>\n" +
+                        String sName = (String) request.getAttribute("nameError");
+                        if (sName != null) {
+                            out.println("<div class=\"form-group has-danger\"><label class=\"form-control-label\" for=\"wrongFirstName\">Imię</label><input type=\"text\" value=\"\" class=\"form-control is-invalid\" id=\"wrongFirstName\"><div class=\"invalid-feedback\">" + sName + "</div></div>");
+                        } else {
+                            out.print("                    <div class=\"form-group\">\n" +
+                                    "                        <label class=\"col-form-label\" for=\"inputFirstName\">Imię</label>\n" +
+                                    "                        <input type=\"text\" class=\"form-control\" placeholder=\"Wprowadź imię\" name=\"inputFirstName\"\n" +
+                                    "                               id=\"inputFirstName\">\n" +
                                     "                    </div>");
                         }
                     %>
-                    <div class="form-group">
-                        <label class="col-form-label" for="inputSurname">Nazwisko</label>
-                        <input type="text" class="form-control" placeholder="Wprowadź nazwisko"
-                               name="inputSurname" id="inputSurname">
-                    </div>
-                    <%
-                        String sSurname=(String)request.getAttribute("surnameError");
-                        if(sName!=null){
-                            out.println("<div class=\"form-group has-danger\">\n" +
-                                    "                        <label class=\"form-control-label\" for=\"wrongSurname\">Nazwisko</label>\n" +
-                                    "                        <input type=\"text\" value=\"\" class=\"form-control is-invalid\" id=\"wrongSurname\">\n" +
-                                    "                        <div class=\"invalid-feedback\">"+sSurname+"</div>\n" +
-                                    "                    </div>");
-                    %>
 
-                    <div class="form-group">
-                        <label class="col-form-label" for="inputBirth">Data urodzenia</label>
-                        <input type="date" class="form-control" name="inputBirth" id="inputBirth">
-                    </div>
                     <%
-                        String sBirth=(String) request.getAttribute("birthError");
-                        if(sBirth!=null){
-                            out.println("<div class=\"form-group has-danger\">\n" +
-                                    "                        <label class=\"form-control-label\" for=\"wrongDate\">Data urodzenia</label>\n" +
-                                    "                        <input type=\"date\" value=\"\" class=\"form-control is-invalid\" id=\"wrongDate\">\n" +
-                                    "                        <div class=\"invalid-feedback\">"+sBirth+"</div>\n" +
+                        String sSurname = (String) request.getAttribute("surnameError");
+                        if (sSurname != null) {
+                            out.println("<div class=\"form-group has-danger\"><label class=\"form-control-label\" for=\"wrongSurname\">Nazwisko</label><input type=\"text\" value=\"\" class=\"form-control is-invalid\" id=\"wrongSurname\"><div class=\"invalid-feedback\">" + sSurname + "</div></div>");
+                        } else {
+                            out.println("                    <div class=\"form-group\">\n" +
+                                    "                        <label class=\"col-form-label\" for=\"inputSurname\">Nazwisko</label>\n" +
+                                    "                        <input type=\"text\" class=\"form-control\" placeholder=\"Wprowadź nazwisko\"\n" +
+                                    "                               name=\"inputSurname\" id=\"inputSurname\">\n" +
                                     "                    </div>");
                         }
                     %>
-                    <div class="form-group">
-                        <label for="inputEmail">Email</label>
-                        <input type="email" class="form-control" name="inputEmail" placeholder="Wprowadź email"
-                               id="inputEmail">
-                    </div>
-<%
-    String sEmail=(String) request.getAttribute("emailError");
-    if(sEmail!=null){
-        out.println("<div class=\"form-group has-danger\">\n" +
-                "                        <label class=\"form-control-label\" for=\"wrongEmail\">Email</label>\n" +
-                "                        <input type=\"email\" value=\"\" class=\"form-control is-invalid\" id=\"wrongEmail\">\n" +
-                "                        <div class=\"invalid-feedback\">"+sEmail+"</div>\n" +
-                "                    </div>");
-%>
-                    <div class="form-group">
-                        <label class="col-form-label" for="inputSeniority">Staż pracy (w latach)</label>
-                        <input type="number" class="form-control" min="0" step="1" name="inputSeniority"
-                               id="inputSeniority"
-                               value="0">
-                    </div>
-<%
-    String sYears=(String) request.getAttribute("yearsError");
-    if(sYears!=null){
-        out.println("<div class=\"form-group has-danger\">\n" +
-                "                        <label class=\"form-control-label\" for=\"wrongSeniority\">Staż pracy (w latach)</label>\n" +
-                "                        <input type=\"number\" value=\"\" class=\"form-control is-invalid\" id=\"wrongSeniority\">\n" +
-                "                        <div class=\"invalid-feedback\">"+sYears+"</div>\n" +
-                "                    </div>");
-%>
-                    <div class="form-group">
-                        <label for="login">Login</label>
-                        <input type="text" class="form-control" name="loginInput" id="login" placeholder="Utwórz login">
-                    </div>
+
+
                     <%
-                        String s=(String) request.getAttribute("loginError");
-                        if(s!=null) {
-                            out.println("<div class=\"form-group has-danger\" > <label class=\"form-control-label\" for=\"wrongLogin\" > Login </label > <input type = \"text\" value = \"\" class=\"form-control is-invalid\" id = \"wrongLogin\" > <div class=\"invalid-feedback\" >"+ s+" </div > </div >");
+                        String sBirth = (String) request.getAttribute("birthError");
+                        if (sBirth != null) {
+                            out.println("<div class=\"form-group has-danger\"><label class=\"form-control-label\" for=\"wrongDate\">Data urodzenia</label><input type=\"date\" value=\"\" class=\"form-control is-invalid\" id=\"wrongDate\"><div class=\"invalid-feedback\">" + sBirth + "</div></div>");
+                        } else {
+                            out.println("                    <div class=\"form-group\">\n" +
+                                    "                        <label class=\"col-form-label\" for=\"inputBirth\">Data urodzenia</label>\n" +
+                                    "                        <input type=\"date\" class=\"form-control\" name=\"inputBirth\" id=\"inputBirth\">\n" +
+                                    "                    </div>");
                         }
                     %>
 
-                    <div class="form-group">
-                        <label for="passwordInput">Hasło</label>
-                        <input type="password" class="form-control" name="passwordInput" id="passwordInput"
-                               placeholder="Utwórz hasło">
-                    </div>
                     <%
-                        String sPassword=(String) request.getAttribute("mainPasswordError");
-                        if(sPassword!=null) {
-                            out.println("<div class=\"form-group has-danger\">\n" +
-                                    "                        <label class=\"form-control-label\" for=\"wrongFirstPassword\">Hasło</label>\n" +
-                                    "                        <input type=\"password\" value=\"\" class=\"form-control is-invalid\" id=\"wrongFirstPassword\">\n" +
-                                    "                        <div class=\"invalid-feedback\">"+sPassword+"</div>\n" +
+                        String sEmail = (String) request.getAttribute("emailError");
+                        if (sEmail != null) {
+                            out.println("<div class=\"form-group has-danger\"><label class=\"form-control-label\" for=\"wrongEmail\">Email</label><input type=\"email\" value=\"\" class=\"form-control is-invalid\" id=\"wrongEmail\"><div class=\"invalid-feedback\">" + sEmail + "</div></div>");
+                        } else {
+                            out.println("                    <div class=\"form-group\">\n" +
+                                    "                        <label for=\"inputEmail\">Email</label>\n" +
+                                    "                        <input type=\"email\" class=\"form-control\" name=\"inputEmail\" placeholder=\"Wprowadź email\"\n" +
+                                    "                               id=\"inputEmail\">\n" +
                                     "                    </div>");
+                        }
                     %>
 
-                    <div class="form-group">
-                        <label for="repeatPassword">Ponowne wprowadzenie hasła</label>
-                        <input type="password" class="form-control" name="repeatPassword" id="repeatPassword"
-                               placeholder="Ponownie wprowadź to samo hasło">
-                    </div>
                     <%
-                        String s2=(String)request.getAttribute("passwordError");
-                        if(s2!=null) {
-                            out.println("<div class=\"form-group has-danger\" ><label class=\"form-control-label\" for=\"wrongPassword\" > Ponowne wprowadzenie hasła</label ><input type = \"text\" value = \"\" class=\"form-control is-invalid\" id = \"wrongPassword\" ><div class=\"invalid-feedback\" >"+ s2 +"</div ></div >");
+                        String sYears = (String) request.getAttribute("yearsError");
+                        if (sYears != null) {
+                            out.println("<div class=\"form-group has-danger\"><label class=\"form-control-label\" for=\"wrongSeniority\">Staż pracy (w latach)</label><input type=\"number\" value=\"\" class=\"form-control is-invalid\" id=\"wrongSeniority\"><div class=\"invalid-feedback\">" + sYears + "</div></div>");
+
+                        } else {
+                            out.println("                    <div class=\"form-group\">\n" +
+                                    "                        <label class=\"col-form-label\" for=\"inputSeniority\">Staż pracy (w latach)</label>\n" +
+                                    "                        <input type=\"number\" class=\"form-control\" min=\"0\" step=\"1\" name=\"inputSeniority\"\n" +
+                                    "                               id=\"inputSeniority\"\n" +
+                                    "                               value=\"0\">\n" +
+                                    "                    </div>");
+                        }
+                    %>
+
+                    <%
+                        String s = (String) request.getAttribute("loginError");
+                        if (s != null) {
+                            out.println("<div class=\"form-group has-danger\" > <label class=\"form-control-label\" for=\"wrongLogin\" > Login </label > <input type = \"text\" value = \"\" class=\"form-control is-invalid\" id = \"wrongLogin\" > <div class=\"invalid-feedback\" >" + s + " </div > </div >");
+                        } else {
+                            out.println("                    <div class=\"form-group\">\n" +
+                                    "                        <label for=\"login\">Login</label>\n" +
+                                    "                        <input type=\"text\" class=\"form-control\" name=\"loginInput\" id=\"login\" placeholder=\"Utwórz login\">\n" +
+                                    "                    </div>");
+                        }
+                    %>
+
+
+                    <%
+                        String sPassword = (String) request.getAttribute("mainPasswordError");
+                        if (sPassword != null) {
+                            out.println("<div class=\"form-group has-danger\"><label class=\"form-control-label\" for=\"wrongFirstPassword\">Hasło</label><input type=\"password\" value=\"\" class=\"form-control is-invalid\" id=\"wrongFirstPassword\"><div class=\"invalid-feedback\">" + sPassword + "</div></div>");
+                        } else {
+                            out.println("                    <div class=\"form-group\">\n" +
+                                    "                        <label for=\"passwordInput\">Hasło</label>\n" +
+                                    "                        <input type=\"password\" class=\"form-control\" name=\"passwordInput\" id=\"passwordInput\"\n" +
+                                    "                               placeholder=\"Utwórz hasło\">\n" +
+                                    "                    </div>");
+                        }
+                    %>
+
+
+                    <%
+                        String s2 = (String) request.getAttribute("passwordError");
+                        if (s2 != null) {
+                            out.println("<div class=\"form-group has-danger\" ><label class=\"form-control-label\" for=\"wrongPassword\" > Ponowne wprowadzenie hasła</label ><input type = \"text\" value = \"\" class=\"form-control is-invalid\" id = \"wrongPassword\" ><div class=\"invalid-feedback\" >" + s2 + "</div ></div >");
+                        } else {
+                            out.println("                    <div class=\"form-group\">\n" +
+                                    "                        <label for=\"repeatPassword\">Ponowne wprowadzenie hasła</label>\n" +
+                                    "                        <input type=\"password\" class=\"form-control\" name=\"repeatPassword\" id=\"repeatPassword\"\n" +
+                                    "                               placeholder=\"Ponownie wprowadź to samo hasło\">\n" +
+                                    "                    </div>");
                         }
                     %>
                     <button type="submit" class="btn-primary btn-lg btn-block">UTWÓRZ KONTO</button>
