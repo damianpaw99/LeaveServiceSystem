@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Wszystkie urlopy pracowników</title>
+    <title>Wnioski</title>
     <link rel="shortcut icon" type="image/png" href="images/favicon.png"/>
     <link rel="stylesheet" href="css/bootstrap.css">
 </head>
@@ -20,10 +20,10 @@
 
         <div class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link" href="employees_manager_view.jsp">Pracownicy</a>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="leaves_manager_view.jsp">Wszystkie urlopy</a>
                 </li>
                 <li class="nav-item">
@@ -36,20 +36,20 @@
 </header>
 
 <main>
-
     <table class="table table-striped" style="font-size:14px; text-align:center;">
 
         <thead>
-        <tr class="table-active">
+        <tr class="table-light">
             <th scope="col" >#</th>
             <th scope="col" >Imię pracownika</th>
             <th scope="col" >Nazwisko pracownika</th>
-            <th scope="col" >Data rozpoczecia</th>
-            <th scope="col" >Data zakończenia</th>
-            <th scope="col" >Zmiana statusu</th>
-            <th scope="col" >Status</th>
+            <th scope="col" >Data urodzenia</th>
+            <th scope="col" >Adres e-mail</th>
+            <th scope="col" >Staż pracy</th>
+
         </tr>
         </thead>
+
         <tbody>
 
         <c:forEach var="tmpLeave" items="${LEAVES_LIST}">
@@ -57,12 +57,11 @@
 
             <tr>
                 <th scope="row">${tmpLeave.id}</th>
-                <td>${tmpLeave.employeeName}</td>
-                <td>${tmpLeave.employeeSurname}</td>
-                <td>${tmpLeave.startDate}</td>
-                <td>${tmpLeave.endDate}</td>
-                <td>${tmpLeave.statusDate}</td>
-                <td>${tmpLeave.status}</td>
+                <td>${tmpLeave.name}</td>
+                <td>${tmpLeave.surname}</td>
+                <td>${tmpLeave.birthDate}</td>
+                <td>${tmpLeave.email}</td>
+                <td>${tmpLeave.employmentYears}</td>
             </tr>
 
         </c:forEach>

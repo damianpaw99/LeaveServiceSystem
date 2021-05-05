@@ -13,7 +13,7 @@
 
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">AnDamPol</a>
+        <a class="navbar-brand" href="active_leaves_view.jsp">BiteOfRest</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -21,8 +21,7 @@
         <div class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="index_manager_view.html">Strona główna
-                    </a>
+                    <a class="nav-link" href="employees_manager_view.jsp">Pracownicy</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="leaves_manager_view.jsp">Wszystkie urlopy</a>
@@ -75,10 +74,10 @@
                 <td>${tmpLeave.endDate}</td>
                 <td>${tmpLeave.statusDate}</td>
                 <td>${tmpLeave.status}</td>
-                <td><a href="${updateLink}">
+                <td><a href="${acceptLink}">
                     <button type="button" class="btn btn-success">Zaakceptuj</button>
                 </a>
-                    <a href="${deleteLink}">
+                    <a href="${declineLink}">
                         <button type="button" class="btn btn-danger">Odrzuć</button>
                     </a></td>
             </tr>
