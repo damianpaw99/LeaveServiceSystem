@@ -3,7 +3,7 @@ package edu.ib.database;
 import java.sql.*;
 
 
-public abstract class DBUtil {
+public class DBUtil {
 
     /**
      * Username
@@ -121,4 +121,7 @@ public abstract class DBUtil {
     public void setConn(Connection conn) {
         this.conn = conn;
     }
+
+
+
 }

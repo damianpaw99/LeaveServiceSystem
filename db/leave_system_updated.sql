@@ -17,7 +17,7 @@ years_of_employment INT);
 -- tabela logowania pracowników
 CREATE TABLE logins(
 employee_id INT, FOREIGN KEY (employee_id) REFERENCES employees(id),
-login VARCHAR(20),
+login VARCHAR(20) unique,
 pass VARCHAR(255));
 
 

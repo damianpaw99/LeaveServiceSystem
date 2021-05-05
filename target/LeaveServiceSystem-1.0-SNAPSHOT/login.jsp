@@ -48,7 +48,7 @@
     <div class="split left">
         <div class="container">
             <div class="centered">
-                <form action="AdminServlet" method="post">
+                <form action="LoginServlet" method="post">
 
                     <h3>Logowanie:</h3>
 
@@ -65,7 +65,14 @@
                                placeholder="Wprowadź hasło">
                     </div>
 
-                    <p class="text-danger">Błędny login lub hasło.</p>
+                    <p class="text-danger">
+                        <%
+                            String s=(String)request.getAttribute("loginError");
+                            if(s!=null){
+                                out.println(s);
+                            }
+                        %>
+                    </p>
 
                     <button type="submit" class="btn btn-primary btn-lg btn-block">Zaloguj</button>
                 </form>

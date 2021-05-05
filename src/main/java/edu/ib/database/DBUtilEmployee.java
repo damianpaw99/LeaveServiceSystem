@@ -61,32 +61,5 @@ public class DBUtilEmployee extends DBUtil {
         return employeeList;
     }
 
-    public void addEmployee(String name, String surname, LocalDate birthDate, String email, int yearsInWork) throws SQLException {
 
-        Connection conn = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-
-        try {
-
-            // polaczenie z BD
-            conn = DriverManager.getConnection(url, login, password);
-
-            // zapytanie SELECT
-            String sql = "CALL add_employee(?,?,?,?,?)";
-            statement = conn.prepareStatement(sql);
-            statement.setString(1,name);
-            statement.setString(2,surname);
-            statement.setDate(3, Date.valueOf(birthDate));
-            statement.setString(4,email);
-            statement.setInt(5,yearsInWork);
-
-            // wykonanie zapytania SQL
-            statement.execute(sql);
-
-        } finally {
-            // zamkniecie obiektow JDBC
-            close(conn, statement, resultSet);
-        }
-    }
 }

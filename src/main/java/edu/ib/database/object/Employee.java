@@ -1,5 +1,6 @@
 package edu.ib.database.object;
 
+import edu.ib.EmployeeException;
 import edu.ib.database.DatabaseMappable;
 
 import java.time.LocalDate;
@@ -16,12 +17,12 @@ public class Employee implements DatabaseMappable {
     public Employee(){
     }
 
-    public Employee(Integer id, String name, String surname, LocalDate birthDate, String email, int employmentYears) {
-        if(!email.matches(".+@.\\.+.+")) throw new IllegalArgumentException("Wrong email format:" + email);
-        if(id<=0) throw new IllegalArgumentException("Wrong id value: "+id);
-        if(name.isEmpty() || name.length()>50) throw new IllegalArgumentException("Wrong name: "+name);
-        if(surname.isEmpty() || surname.length()>50) throw new IllegalArgumentException("Wrong surname: "+surname);
-        if(employmentYears<0) throw new IllegalArgumentException("Wrong employment years value: "+employmentYears);
+    public Employee(Integer id, String name, String surname, LocalDate birthDate, String email, int employmentYears) throws EmployeeException {
+        if(!email.matches(".+@.+\\..+")) throw new EmployeeException("Wrong email format",3);
+        if(id<=0) throw new EmployeeException("Wrong id value: "+id,0);
+        if(name.isEmpty() || name.length()>50) throw new EmployeeException("Wrong name: "+name,1);
+        if(surname.isEmpty() || surname.length()>50) throw new EmployeeException("Wrong surname: "+surname,2);
+        if(employmentYears<0) throw new EmployeeException("Wrong employment years value: "+employmentYears,4);
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -34,8 +35,8 @@ public class Employee implements DatabaseMappable {
         return id;
     }
 
-    public void setId(Integer id) {
-        if(id<=0) throw new IllegalArgumentException("Wrong id value: "+id);
+    public void setId(Integer id) throws EmployeeException {
+        if(id<=0) throw new EmployeeException("Wrong id value: "+id,0);
         this.id = id;
     }
 
@@ -43,8 +44,8 @@ public class Employee implements DatabaseMappable {
         return name;
     }
 
-    public void setName(String name) {
-        if(name.isEmpty() || name.length()>50) throw new IllegalArgumentException("Wrong name: "+name);
+    public void setName(String name) throws EmployeeException {
+        if(name.isEmpty() || name.length()>50) throw new EmployeeException("Wrong name: "+name,1);
         this.name = name;
     }
 
@@ -52,8 +53,8 @@ public class Employee implements DatabaseMappable {
         return surname;
     }
 
-    public void setSurname(String surname) {
-        if(surname.isEmpty() || surname.length()>50) throw new IllegalArgumentException("Wrong surname: "+surname);
+    public void setSurname(String surname) throws EmployeeException {
+        if(surname.isEmpty() || surname.length()>50) throw new EmployeeException("Wrong surname: "+surname,2);
         this.surname = surname;
     }
 
@@ -69,8 +70,8 @@ public class Employee implements DatabaseMappable {
         return email;
     }
 
-    public void setEmail(String email) {
-        if(!email.matches(".+@.\\.+.+")) throw new IllegalArgumentException("Wrong email format");
+    public void setEmail(String email) throws EmployeeException {
+        if(!email.matches(".+@.+\\..+")) throw new EmployeeException("Wrong email format",3);
         this.email = email;
     }
 
@@ -78,8 +79,8 @@ public class Employee implements DatabaseMappable {
         return employmentYears;
     }
 
-    public void setEmploymentYears(Integer employmentYears) {
-        if(employmentYears<0) throw new IllegalArgumentException("Wrong employment years value: "+employmentYears);
+    public void setEmploymentYears(Integer employmentYears) throws EmployeeException {
+        if(employmentYears<0) throw new EmployeeException("Wrong employment years value: "+employmentYears,4);
         this.employmentYears = employmentYears;
     }
 
