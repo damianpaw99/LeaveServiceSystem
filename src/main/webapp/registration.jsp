@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: anias
-  Date: 04.05.2021
-  Time: 17:27
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -23,7 +16,7 @@
 <body>
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">AnDamPol</a>
+        <a class="navbar-brand" href="index.html">BiteOfRest</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
                 aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -32,7 +25,7 @@
         <div class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="index.html">Strona główna </a>
+                    <a class="nav-link" href="index.html">Strona główna</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="login.jsp">Logowanie </a>
@@ -50,12 +43,18 @@
             <form action="ControllerServlet">
 
                 <fieldset>
-                    <legend>Rejestracja pracownika</legend>
+                    <legend>Utwórz nowe konto pracownika</legend>
 
                     <div class="form-group">
                         <label class="col-form-label" for="inputFirstName">Imię</label>
                         <input type="text" class="form-control" placeholder="Wprowadź imię" name="inputFirstName"
                                id="inputFirstName">
+                    </div>
+
+                    <div class="form-group has-danger">
+                        <label class="form-control-label" for="wrongFirstName">Imię</label>
+                        <input type="text" value="" class="form-control is-invalid" id="wrongFirstName">
+                        <div class="invalid-feedback">PodPIS</div>
                     </div>
 
                     <div class="form-group">
@@ -64,9 +63,21 @@
                                name="inputSurname" id="inputSurname">
                     </div>
 
+                    <div class="form-group has-danger">
+                        <label class="form-control-label" for="wrongSurname">Nazwisko</label>
+                        <input type="text" value="" class="form-control is-invalid" id="wrongSurname">
+                        <div class="invalid-feedback">PodPIS</div>
+                    </div>
+
                     <div class="form-group">
                         <label class="col-form-label" for="inputBirth">Data urodzenia</label>
                         <input type="date" class="form-control" name="inputBirth" id="inputBirth">
+                    </div>
+
+                    <div class="form-group has-danger">
+                        <label class="form-control-label" for="wrongDate">Data urodzenia</label>
+                        <input type="date" value="" class="form-control is-invalid" id="wrongDate">
+                        <div class="invalid-feedback">PodPIS</div>
                     </div>
 
                     <div class="form-group">
@@ -75,11 +86,23 @@
                                id="inputEmail">
                     </div>
 
+                    <div class="form-group has-danger">
+                        <label class="form-control-label" for="wrongEmail">Email</label>
+                        <input type="email" value="" class="form-control is-invalid" id="wrongEmail">
+                        <div class="invalid-feedback">PodPIS</div>
+                    </div>
+
                     <div class="form-group">
-                        <label class="col-form-label" for="inputSeniority">Staż pracy w firmie (w latach)</label>
+                        <label class="col-form-label" for="inputSeniority">Staż pracy (w latach)</label>
                         <input type="number" class="form-control" min="0" step="1" name="inputSeniority"
                                id="inputSeniority"
                                value="0">
+                    </div>
+
+                    <div class="form-group has-danger">
+                        <label class="form-control-label" for="wrongSeniority">Staż pracy (w latach)</label>
+                        <input type="number" value="" class="form-control is-invalid" id="wrongSeniority">
+                        <div class="invalid-feedback">PodPIS</div>
                     </div>
 
                     <div class="form-group">
@@ -100,6 +123,12 @@
                                placeholder="Utwórz hasło">
                     </div>
 
+                    <div class="form-group has-danger">
+                        <label class="form-control-label" for="wrongFirstPassword">Hasło</label>
+                        <input type="password" value="" class="form-control is-invalid" id="wrongFirstPassword">
+                        <div class="invalid-feedback">PodPIS</div>
+                    </div>
+
                     <div class="form-group">
                         <label for="repeadPassword">Ponowne wprowadzenie hasła</label>
                         <input type="password" class="form-control" name="repeadPassword" id="repeadPassword"
@@ -112,7 +141,7 @@
                         <div class="invalid-feedback">Błędne hasło.</div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">UTWÓRZ KONTO</button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Utwórz konto</button>
                 </fieldset>
             </form>
         </div>

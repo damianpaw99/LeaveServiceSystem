@@ -13,17 +13,13 @@
 
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">AnDamPol</a>
+        <a class="navbar-brand" href="leaves_employee_view.jsp">BiteOfRest</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="index_employee_view.html">Strona główna
-                    </a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="leave_form.jsp">Zaplanuj urlop</a>
                 </li>
@@ -41,7 +37,7 @@
     <table class="table table-striped" style="font-size:14px; text-align:center;">
 
         <thead>
-        <tr class="table-light">
+        <tr class="table-secondary">
             <th scope="col" >#</th>
             <th scope="col" >Data rozpoczecia</th>
             <th scope="col" >Data zakończenia</th>

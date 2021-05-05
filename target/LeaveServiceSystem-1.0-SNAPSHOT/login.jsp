@@ -19,7 +19,7 @@
 
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a href="#" class="navbar-brand">AnDamPol</a>
+        <a class="navbar-brand" href="index.html">BiteOfRest</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
                 aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -77,7 +77,7 @@
     <div class="split right">
         <div class="centered">
             <h4 class="text-warning">Nie masz konta? Zarejestruj się.</h4>
-            <button type="button" class="btn btn-warning btn-lg btn-block" href="registration.html">Załóż konto</button>
+            <button type="button" class="btn btn-warning btn-lg btn-block" href="registration.jsp">Załóż konto</button>
         </div>
     </div>
 
