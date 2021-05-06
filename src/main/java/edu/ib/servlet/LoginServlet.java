@@ -5,6 +5,7 @@ import edu.ib.Logger;
 import edu.ib.database.DBUtil;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -34,7 +35,9 @@ public class LoginServlet extends HttpServlet {
             if(!validate(login,request.getParameter("passwordInput"))){
                 throw new IncorrectLoginPasswordException("");
             }
+
             RequestDispatcher dispatcher=request.getRequestDispatcher("/leaves_manager_view.jsp");
+
             dispatcher.forward(request,response);
 
         } catch(IncorrectLoginPasswordException e){
@@ -45,8 +48,10 @@ public class LoginServlet extends HttpServlet {
                 logger.logIn(Logger.hash(request.getParameter("passwordInput")));
                 session.setAttribute("logger",logger);
 
-                RequestDispatcher dispatcher=request.getRequestDispatcher("/leaves_employee_view.jsp");
-                dispatcher.forward(request,response);
+                //RequestDispatcher dispatcher=request.getRequestDispatcher("EmployeeViewServlet");
+                //dispatcher.forward(request,response);
+                response.sendRedirect("EmployeeViewServlet");
+
 
             } catch(IncorrectLoginPasswordException | SQLException | ClassNotFoundException er){
                 request.setAttribute("loginError","Błędny login lub hasło");

@@ -13,7 +13,7 @@
 
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="leaves_employee_view.jsp">BiteOfRest</a>
+        <a class="navbar-brand" href="EmployeeViewServlet">BiteOfRest</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -24,10 +24,13 @@
                     <a class="nav-link" href="leave_form.jsp">Zaplanuj urlop</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="leaves_employee_view.jsp">Przeglądaj urlopy</a>
+                    <a class="nav-link" href="EmployeeViewServlet">Przeglądaj urlopy</a>
                 </li>
             </ul>
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Wyloguj</button>
+            <form action="EmployeeViewServlet" method="get">
+                <input type="hidden" name="method" value="LOG OUT">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Wyloguj</button>
+            </form>
         </div>
     </nav>
 </header>
@@ -51,29 +54,35 @@
 
         <c:forEach var="tmpLeave" items="${LEAVES_LIST}">
 
-            <c:url var="updateLink" value="LeavesServlet">
-                <c:param name="command" value="LOAD"></c:param>
-                <c:param name="leaveID" value="${tmpLeave.id}"></c:param>
+            <c:url var="updateLink" value="EmployeeViewServlet">
+                <c:param name="command" value="EDIT"></c:param>
+                <c:param name="leaveID" value="${tmpLeave.leaveId}"></c:param>
             </c:url>
 
-            <c:url var="deleteLink" value="LeavesServlet">
-                <c:param name="command" value="DELETE"></c:param>
-                <c:param name="leaveID" value="${tmpLeave.id}"></c:param>
+            <c:url var="deleteLink" value="EmployeeViewServlet" >
+                <c:param name="command" value="CANCEL"></c:param>
+                <c:param name="leaveID" value="${tmpLeave.leaveId}"></c:param>
             </c:url>
 
             <tr>
-                <th scope="row">${tmpLeave.id}</th>
+                <th scope="row">${tmpLeave.leaveId}</th>
                 <td>${tmpLeave.startDate}</td>
                 <td>${tmpLeave.endDate}</td>
                 <td>${tmpLeave.statusDate}</td>
                 <td>${tmpLeave.status}</td>
-                <td><a href="${updateLink}">
-                    <button type="button" class="btn btn-warning">Modyfikuj</button>
+
+
+                <td><a href="${tmpLeave.isEditable() ? updateLink :""}">
+
+                    <button type="button" ${tmpLeave.isEditable()?"":"disabled"} class="btn btn-warning ${tmpLeave.isEditable()?"":"disabled"}">Modyfikuj</button>
+
                 </a></td>
-                <td><a href="${deleteLink}"
-                       onclick="if(!(confirm('Czy na pewno chcesz usunąć ten ośrodek?'))) return false">
-                    <button type="button" class="btn btn-danger">Anuluj</button>
-                </a></td>
+                <td><a href="${tmpLeave.isEmployeeDeletable() ? deleteLink :""}"
+                    onclick="if(!(confirm('Czy na pewno chcesz anulować urlop?'))) return false">
+                     <button type="button" ${tmpLeave.isEmployeeDeletable()?"":"disabled"} class="btn btn-danger ${tmpLeave.isEmployeeDeletable()?"":"disabled"}">Anuluj</button>
+
+             </a></td>
+
 <%--                <td><a--%>
 <%--                    <button type="button" class="btn btn-warning disabled">Modyfikuj</button>--%>
 <%--                </a></td>--%>

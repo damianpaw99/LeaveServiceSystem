@@ -36,15 +36,16 @@ status_name VARCHAR(50));
 
 
 INSERT INTO statuses(status_name) VALUES
-('submitted'), -- 1 wniosek o urlop złożony
-('accepted'), -- 2 wniosek o urlop zaakceptowany
-('rejected'), -- 3 wniosek o urlop odrzucony
-('for_cancelation'), -- 4 złożono wniosek o anulowanie urlopu
-('cancelled'), -- 5 urlop anulowany
-('cancellation_rejected'), -- 6 wniosek o anulowanie urlopu odrzucony
-('withdrawn')#, -- 7 wniosek o urlop wycofany (przed podjęciem przez kierownictwo jakichkolwiek decyzji po złożeniu wniosku o urlop)
-#('imposed')
-; -- 8 urlop narzucony z góry
+('Złożony'), -- 1 wniosek o urlop złożony
+('Zaakceptowany'), -- 2 wniosek o urlop zaakceptowany
+('Odrzucony'), -- 3 wniosek o urlop odrzucony
+('Do anulacji'), -- 4 złożono wniosek o anulowanie urlopu
+('Anulowany'), -- 5 urlop anulowany
+('Anulowanie odrzucone'), -- 6 wniosek o anulowanie urlopu odrzucony
+('Wycofany'), -- 7 wniosek o urlop wycofany (przed podjęciem przez kierownictwo jakichkolwiek decyzji po złożeniu wniosku o urlop)
+('Do edycji'), # 8
+('Edytowany'), #9
+('Edycja odrzzucona'); #10
 
 -- tabela łączaca urlopy ze stoatusami wraz z datą zmiany statusu wniosku o urlop
 CREATE TABLE leave_has_status(
@@ -72,7 +73,7 @@ RETURN pass_correct;
 END //
 DELIMITER ;
 
-select check_pass('annanowicka', '123');
+
 
 -- funckja sprawdzająca ile już dni urlopu wziął pracownik
 #drop function leave_taken;
@@ -96,7 +97,7 @@ SELECT sum(DATEDIFF(lt.end_date, lt.start_date))+count(*) INTO leaves_cancelled
 FROM leaves_table lt
 JOIN leave_has_status lhs
 ON lt.id=lhs.leave_id
-WHERE lt.employee_id=input_id AND (lhs.status_id=5 OR lhs.status_id=3) and year(lt.start_date)=input_year;
+WHERE lt.employee_id=input_id AND (lhs.status_id=5 OR lhs.status_id=3 or lhs.status_id=7) and year(lt.start_date)=input_year;
 
 if isnull(leaves_cancelled) then
 	set leaves_cancelled=0;
@@ -120,8 +121,8 @@ deterministic
 begin
 declare s_id int default -1;
 declare last_status_date datetime;
-select max(status_date) into last_status_date from leave_has_status where l_id=leaves_id;
-select status_id into s_id from leave_has_status where l_id=leaves_id and status_date=last_status_date;
+select max(status_date) into last_status_date from leave_has_status where l_id=leave_id;
+select status_id into s_id from leave_has_status where l_id=leave_id and status_date=last_status_date;
 return s_id;
 end$$
 delimiter ;
@@ -139,8 +140,6 @@ SELECT id e INTO new_employee_id FROM employees e ORDER BY id desc limit 1;
 INSERT INTO logins(employee_id, login, pass) VALUES (new_employee_id, input_log, input_pass);
 END //
 DELIMITER ;
-
-call add_employee('Anna', 'Nowicka', '1990-10-10', 'annanow@gmail.com', '1', 'annanowicka', '123');
 
 -- procedura dodająca urlop do systemu
 DELIMITER //
@@ -191,7 +190,9 @@ begin
 #('cancellation_rejected'), -- 6 wniosek o anulowanie urlopu odrzucony
 #('withdrawn')#, -- 7 wniosek o urlop wycofany (przed podjęciem przez kierownictwo jakichkolwiek decyzji po złożeniu wniosku o urlop)
 declare newest int default newest_state(l_id);
-if((newest=1 and (state=2 or state=3 or state=7)) or (newest=2 and (state=4 or state=5)) or (newest=4 and (state=5 or state=6)))then
+if((newest=1 and (state=2 or state=3 or state=7)) or (newest=2 and (state=4 or state=5)) or (newest=4 and (state=5 or state=6)))
+or (newest=8 and(state=9 or state=10))
+then
 	insert into leave_has_status(leave_id,status_id,status_date) values (l_id,state,now());
 else
 	signal sqlstate '45002' set message_text = 'Incorrect new status!';
@@ -209,27 +210,11 @@ insert into leave_has_status(leave_id,status_id,status_date) values (new.id,1,no
 end$$
 DELIMITER ;
 
-call add_leave('1', '2021-06-01', '2021-06-07');
-select leave_taken(1,2021);
 -- VIEWS --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- widok wszystkich urlopów pracowników z najnowszym statusem
 CREATE VIEW employees_leaves AS
-SELECT e.id as 'id', e.firstname  AS 'Employee name', e.surname AS 'Employee surname', 
-lt.start_date AS 'First date of leave', lt.end_date AS 'Last date of leave',
-lhs.status_date AS 'Date of status change',
-s.status_name AS 'Status'
-FROM employees e
-JOIN leaves_table lt ON e.id=lt.employee_id
-JOIN leave_has_status lhs ON lt.id=lhs.leave_id
-JOIN statuses s ON lhs.status_id=s.id
-where newest_state(lt.employee_id)=s.id;
-
-select * from employees_leaves;
-
--- widok urlopów, w związku z którymi podjąć trzeba jakąś decyzję (wniosek złożony lub złożono wniosek o anulowanie urlopu)
-CREATE VIEW employees_leaves_active AS
-SELECT e.id as 'id', e.firstname AS 'employeeName', e.surname AS 'employeeSurname', 
+SELECT e.id as 'id',lt.id as 'leaveId', e.firstname  AS 'employeeName', e.surname AS 'employeeSurname', 
 lt.start_date AS 'startDate', lt.end_date AS 'endDate',
 lhs.status_date AS 'statusDate',
 s.status_name AS 'status'
@@ -237,6 +222,17 @@ FROM employees e
 JOIN leaves_table lt ON e.id=lt.employee_id
 JOIN leave_has_status lhs ON lt.id=lhs.leave_id
 JOIN statuses s ON lhs.status_id=s.id
-WHERE lhs.status_id='1' OR lhs.status_id='4';
+where s.id=newest_state(lt.id);
 
-select * from employees_leaves_active;
+
+-- widok urlopów, w związku z którymi podjąć trzeba jakąś decyzję (wniosek złożony lub złożono wniosek o anulowanie urlopu)
+CREATE VIEW employees_leaves_active AS
+SELECT e.id as 'id',lt.id as 'leaveId', e.firstname AS 'employeeName', e.surname AS 'employeeSurname', 
+lt.start_date AS 'startDate', lt.end_date AS 'endDate',
+lhs.status_date AS 'statusDate',
+s.status_name AS 'status'
+FROM employees e
+JOIN leaves_table lt ON e.id=lt.employee_id
+JOIN leave_has_status lhs ON lt.id=lhs.leave_id
+JOIN statuses s ON lhs.status_id=s.id
+WHERE lhs.status_id='1' OR lhs.status_id='4' or lhs.status_id='8';

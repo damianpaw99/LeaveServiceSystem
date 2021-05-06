@@ -7,7 +7,9 @@ import java.time.LocalDateTime;
 
 public class Leave implements DatabaseMappable {
 
-    private int id;
+
+    private Integer id;
+    private Integer leaveId;
     private String employeeName;
     private String employeeSurname;
     private LocalDate startDate;
@@ -28,6 +30,22 @@ public class Leave implements DatabaseMappable {
         this.endDate = endDate;
         this.statusDate = statusDate;
         this.status = status;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getLeaveId() {
+        return leaveId;
+    }
+
+    public void setLeaveId(Integer leaveId) {
+        this.leaveId = leaveId;
     }
 
     public String getEmployeeName() {
@@ -78,5 +96,22 @@ public class Leave implements DatabaseMappable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+
+    public boolean isEmployeeDeletable(){
+        if(startDate.isAfter(LocalDate.now().plusDays(2)) && (status.equals("Złożony") || status.equals("Zaakceptowany"))){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isEditable(){
+        return startDate.isBefore(LocalDate.now().plusDays(2)) && (status.equals("Zaakceptowany"));
+    }
+
+    public boolean hasDecision(){
+        return status.equals("Złożony") || status.equals("Do anulacji") || status.equals("Do edycji");
     }
 }

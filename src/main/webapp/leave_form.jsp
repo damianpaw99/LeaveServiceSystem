@@ -30,7 +30,7 @@
                     <a class="nav-link" href="leave_form.jsp">Zaplanuj urlop</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="leaves_employee_view.jsp">Przeglądaj urlopy</a>
+                    <a class="nav-link" href="EmployeeViewServlet">Przeglądaj urlopy</a>
                 </li>
             </ul>
             <form action="LeaveServlet" method="get">

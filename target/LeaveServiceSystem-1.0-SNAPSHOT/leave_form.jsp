@@ -30,7 +30,7 @@
                     <a class="nav-link" href="leave_form.jsp">Zaplanuj urlop</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="leaves_employee_view.jsp">Przeglądaj urlopy</a>
+                    <a class="nav-link" href="EmployeeViewServlet">Przeglądaj urlopy</a>
                 </li>
             </ul>
             <form action="LeaveServlet" method="get">
@@ -83,7 +83,7 @@
                     String sEnd = (String) request.getAttribute("endError");
                     if (sEnd != null) {
                         out.println("                <div class=\"form-group has-danger\">\n" +
-                                "                    <label class=\"form-control-label\" for=\"wrongEndDate\">Dzień rozpoczęcia</label>\n" +
+                                "                    <label class=\"form-control-label\" for=\"wrongEndDate\">Dzień zakończenia</label>\n" +
                                 "                    <input type=\"text\" value=\"${param.endDateInput!=null ? param.endDateInput:\"\"}\" class=\"form-control is-invalid\" name=\"endDateInput\" id=\"wrongEndDate\">\n" +
                                 "                    <div class=\"invalid-feedback\">" + sEnd + "</div>\n" +
                                 "                </div>");

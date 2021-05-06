@@ -104,29 +104,5 @@ public class DBUtilLeave extends DBUtil{
 
 
 
-    public void changeLeaveState(int leaveId,int stateId) throws SQLException {
-        Connection conn = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
 
-        try {
-
-            // polaczenie z BD
-            conn = DriverManager.getConnection(url, login, password);
-
-            // zapytanie SELECT
-            String sql = "CALL changeLeave_state(?,?)";
-            statement = conn.prepareStatement(sql);
-            statement.setInt(1, leaveId);
-            statement.setInt(2, stateId);
-
-
-            // wykonanie zapytania SQL
-            statement.execute(sql);
-
-        } finally {
-            // zamkniecie obiektow JDBC
-            close(conn, statement, resultSet);
-        }
-    }
 }

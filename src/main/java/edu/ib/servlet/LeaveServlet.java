@@ -74,7 +74,7 @@ public class LeaveServlet extends HttpServlet {
             RequestDispatcher dispatcher=request.getRequestDispatcher("/leave_form.jsp");
             dispatcher.forward(request,response);
         } catch (IllegalArgumentException e){
-            RequestDispatcher dispatcher=request.getRequestDispatcher("leave_form.jsp");
+            RequestDispatcher dispatcher=request.getRequestDispatcher("/leave_form.jsp");
             dispatcher.forward(request,response);
         }
     }
