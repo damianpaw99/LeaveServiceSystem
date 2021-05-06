@@ -6,7 +6,7 @@ USE leave_system;
 CREATE TABLE employees(
 id INT AUTO_INCREMENT PRIMARY KEY,
 firstname VARCHAR(50),
-surnamechangeLeaveState VARCHAR(50),
+surname VARCHAR(50),
 date_of_birth DATE,
 email VARCHAR(50),
 years_of_employment INT);
@@ -253,9 +253,9 @@ grant execute on procedure add_leave to 'employee'@'localhost';
 
 create user 'manager'@'localhost' identified by 'managerPassword';
 grant execute on procedure changeLeaveState to 'manager'@'localhost';
-grant select on all_amployees to 'manager'@'localhost';
-grant select on employee_leaves to 'manager'@'localhost';
-grant select on employee_leaves_active to 'manager'@'localhost';
+grant select on all_employees to 'manager'@'localhost';
+grant select on employees_leaves to 'manager'@'localhost';
+grant select on employees_leaves_active to 'manager'@'localhost';
 
 
 create user 'logger'@'localhost' identified by 'loggerPass';
