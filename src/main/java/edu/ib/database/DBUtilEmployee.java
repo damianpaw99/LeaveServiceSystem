@@ -158,7 +158,36 @@ public class DBUtilEmployee extends DBUtil {
         }
     }
 
+    public int daysLeft(int employeeId, int year) throws SQLException {
+        int out=0;
 
+        Connection conn = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+
+            // polaczenie z BD
+            conn = DriverManager.getConnection(url, login, password);
+
+            // zapytanie SELECT
+            String sql = "SELECT days_left(?,?)";
+            statement = conn.prepareStatement(sql);
+            statement.setInt(1,employeeId);
+            statement.setInt(2,year);
+            // wykonanie zapytania SQL
+            resultSet = statement.executeQuery();
+
+            // przetworzenie wyniku zapytania
+            resultSet.next();
+            out=resultSet.getInt(1);
+
+        } finally {
+            // zamkniecie obiektow JDBC
+            close(conn, statement, resultSet);
+        }
+        return out;
+    }
 
 
 }

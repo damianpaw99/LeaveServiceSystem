@@ -27,7 +27,7 @@
         <div class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="leave_form.jsp">Zaplanuj urlop</a>
+                    <a class="nav-link" href="LeaveServlet">Zaplanuj urlop</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="EmployeeViewServlet">Przeglądaj urlopy</a>
@@ -39,7 +39,7 @@
                         <a class="nav-link">Zalogowano jako </a>
                     </li>
                 </ul>
-                <button class="btn btn-secondary my-2 my-sm-0" type="submit"  onclick="if(!(confirm('Czy na pewno chcesz się wylogować?'))) return false">Wyloguj</button>
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit" name="commend" value="LOG OUT"  onclick="if(!(confirm('Czy na pewno chcesz się wylogować?'))) return false">Wyloguj</button>
             </form>
         </div>
     </nav>
@@ -58,7 +58,9 @@
 
             <div class="row form-group"></div>
 
-            <%--            <p class="text-info">Pozostało ci ${tutaj.liczba.dni} dni urlopu do wykorzystania.</p>--%>
+            <p class="text-info">Pozostało ci <%
+                out.println(request.getAttribute("daysLeft"));
+            %> dni urlopu do wykorzystania.</p>
 
             <form action="LeaveServlet" method="post">
                 <input type="hidden" name="leaveId" value="<%

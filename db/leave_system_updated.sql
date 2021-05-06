@@ -87,13 +87,13 @@ DECLARE leaves_submitted INT;
 DECLARE leaves_cancelled INT DEFAULT 0;
 DECLARE leaves_sum INT DEFAULT 0;
 
-SELECT sum(days_between(lt.end_date, lt.start_date)) INTO leaves_submitted
+SELECT sum(days_between(lt.start_date, lt.end_date)) INTO leaves_submitted
 FROM leaves_table lt
 JOIN leave_has_status lhs
 ON lt.id=lhs.leave_id
 WHERE lt.employee_id=input_id AND (lhs.status_id=1) and year(lt.start_date)=input_year;
 
-SELECT sum(days_beetween(lt.end_date, lt.start_date)) INTO leaves_cancelled
+SELECT sum(days_between(lt.start_date, lt.end_date)) INTO leaves_cancelled
 FROM leaves_table lt
 JOIN leave_has_status lhs
 ON lt.id=lhs.leave_id
@@ -250,6 +250,7 @@ create user 'employee'@'localhost' identified by 'employeePass' ;
 grant execute on procedure changeLeaveState to 'employee'@'localhost';
 grant select on employees_leaves to 'employee'@'localhost';
 grant execute on procedure add_leave to 'employee'@'localhost';
+grant execute on function days_left to 'employee'@'localhost';
 
 create user 'manager'@'localhost' identified by 'managerPassword';
 grant execute on procedure changeLeaveState to 'manager'@'localhost';
@@ -287,3 +288,17 @@ return datediff(date2,date1)-count+1;
 end$$
 delimiter ;
 
+delimiter $$
+create function days_left(employee_id int, input_year int)
+returns int
+deterministic
+begin
+declare test int;
+select years_of_employment into test from employees where id=employee_id;
+if(test<10) then
+return 20-leave_taken(employee_id,input_year);
+else
+return 26-leave_taken(employee_id,input_year);
+end if;
+end$$
+delimiter ;

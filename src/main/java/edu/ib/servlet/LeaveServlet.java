@@ -26,21 +26,41 @@ public class LeaveServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
-
+        session=request.getSession();
+        dbUtil=new DBUtilEmployee("employee","employeePass",url);
         String editLeave=(String) request.getAttribute("leaveId");
+        String commend=request.getParameter("commend");
         RequestDispatcher dispatcher;
         if(editLeave!=null){
             request.setAttribute("leaveId",Integer.valueOf(editLeave));
             request.setAttribute("startValue",request.getAttribute("startValue"));
             request.setAttribute("endValue",request.getAttribute("endValue"));
+            Logger logger=(Logger)session.getAttribute("logger");
+            try {
+                int id= logger.getEmployeeLoggedId();
+                int days_left=dbUtil.daysLeft(id,LocalDate.now().getYear());
+                request.setAttribute("daysLeft",days_left);
+            } catch (IncorrectLoginPasswordException | SQLException e) {
+                e.printStackTrace();
+            }
             dispatcher = request.getRequestDispatcher("/leave_form.jsp");
-        } else {
-            session=request.getSession();
+
+        } else if(commend!=null){ //wylogowanie
             session.removeAttribute("logger");
             dispatcher = request.getRequestDispatcher("/index.html");
+
+        } else{
+            Logger logger=(Logger)session.getAttribute("logger");
+            try {
+                int id= logger.getEmployeeLoggedId();
+                int days_left=dbUtil.daysLeft(id,LocalDate.now().getYear());
+                request.setAttribute("daysLeft",days_left);
+            } catch (IncorrectLoginPasswordException | SQLException e) {
+                e.printStackTrace();
+            }
+            dispatcher = request.getRequestDispatcher("/leave_form.jsp");
         }
+
         dispatcher.forward(request,response);
     }
 
