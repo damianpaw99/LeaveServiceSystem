@@ -246,6 +246,24 @@ email as 'email',
 years_of_employment as 'employmentYears'
 from employees;
 
+create user 'employee'@'localhost' identified by 'employeePass' ;
+grant execute on procedure changeLeaveState to 'employee'@'localhost';
+grant select on employees_leaves to 'employee'@'localhost';
+grant execute on procedure add_leave to 'employee'@'localhost';
+
+create user 'manager'@'localhost' identified by 'managerPassword';
+grant execute on procedure changeLeaveState to 'manager'@'localhost';
+grant select on all_amployees to 'manager'@'localhost';
+grant select on employee_leaves to 'manager'@'localhost';
+grant select on employee_leaves_active to 'manager'@'localhost';
+
+
+create user 'logger'@'localhost' identified by 'loggerPass';
+grant execute on function check_pass to 'logger'@'localhost';
+
+create user 'create'@'localhost' identified by 'createPass';
+grant execute on procedure add_employee to 'create'@'localhost';
+
 
 grant select on all_employees to 'manager'@'localhost';
 grant execute on procedure changeLeaveState to 'manager'@'localhost';

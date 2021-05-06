@@ -38,7 +38,7 @@ public class RegistrationServlet extends HttpServlet {
             String login=request.getParameter("loginInput");
             String pass= Logger.hash(request.getParameter("passwordInput"));
             String pass1=Logger.hash(request.getParameter("repeatPassword"));
-
+            if(pass.isEmpty()) throw new IllegalArgumentException("Empty password");
             if (!pass.equals(pass1)) throw new IllegalArgumentException("Password are not the same");
 
             dbUtil.addEmployee(employee.getName(),employee.getSurname(),employee.getBirthDate(), employee.getEmail(),employee.getEmploymentYears(),login,pass);
@@ -49,13 +49,18 @@ public class RegistrationServlet extends HttpServlet {
             dispatcher.forward(request,response);
         } catch (SQLException e) {
             e.printStackTrace();
-            request.setAttribute("loginError","Podany login jest już zajęty");
+            if(e.getSQLState().equals("45002")) {
+                request.setAttribute("loginError", "Podany login jest już zajęty");
+            }
             RequestDispatcher dispatcher=request.getRequestDispatcher("/registration.jsp");
             dispatcher.forward(request,response);
         } catch(EmployeeException e){
             switch (e.getCode()){
                 case 1:
+                    request.setAttribute("nameError", "Błędne imię");
+                    break;
                 case 2:
+                    request.setAttribute("surnameError", "Błędne nazwisko");
                     break;
                 case 3:
                     request.setAttribute("emailError","Błędny adres email");
@@ -75,7 +80,13 @@ public class RegistrationServlet extends HttpServlet {
             RequestDispatcher dispatcher=request.getRequestDispatcher("/registration.jsp");
             dispatcher.forward(request,response);
         } catch(IllegalArgumentException e){
-            request.setAttribute("passwordError","Hasła nie są identyczne!");
+            if(e.getMessage().equals("Empty password")){
+                request.setAttribute("mainPasswordError","Hasło nie może być puste!");
+            } else {
+                request.setAttribute("passwordError", "Hasła nie są identyczne!");
+            }
+            RequestDispatcher dispatcher=request.getRequestDispatcher("/registration.jsp");
+            dispatcher.forward(request,response);
         }
 
 

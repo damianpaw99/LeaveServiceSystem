@@ -84,7 +84,9 @@
     <div class="split right">
         <div class="centered">
             <h4 class="text-warning">Nie masz konta? Zarejestruj się.</h4>
-            <button type="button" class="btn btn-warning btn-lg btn-block" href="registration.jsp">Załóż konto</button>
+            <form action="registration.jsp" method="get">
+                <button type="submit" class="btn btn-warning btn-lg btn-block">Załóż konto</button>
+            </form>
         </div>
     </div>
 
