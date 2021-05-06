@@ -21,16 +21,18 @@
         <div class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="employees_manager_view.jsp">Pracownicy</a>
+                    <a class="nav-link" href="AllEmployeesServlet">Pracownicy</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="leaves_manager_view.jsp">Wszystkie urlopy</a>
+                    <a class="nav-link" href="ManagerAllServlet">Wszystkie urlopy</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="active_leaves_view.jsp">Wnioski do rozpatrzenia</a>
+                    <a class="nav-link" href="ManagerActiveServlet">Wnioski do rozpatrzenia</a>
                 </li>
             </ul>
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Wyloguj</button>
+            <form action="ManagerActiveServlet" method="get">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit" name="command" value="LOG OUT">Wyloguj</button>
+            </form>
         </div>
     </nav>
 </header>
@@ -56,18 +58,18 @@
 
         <c:forEach var="tmpLeave" items="${LEAVES_LIST}">
 
-            <c:url var="acceptLink" value="LeavesServlet">
-                <c:param name="command" value="UPDATE"></c:param>
-                <c:param name="leaveID" value="${tmpLeave.id}"></c:param>
+            <c:url var="acceptLink" value="ManagerActiveServlet">
+                <c:param name="command" value="ACCEPT"></c:param>
+                <c:param name="leaveID" value="${tmpLeave.leaveId}"></c:param>
             </c:url>
 
-            <c:url var="declineLink" value="LeavesServlet">
-                <c:param name="command" value="UPDATE"></c:param>
-                <c:param name="leaveID" value="${tmpLeave.id}"></c:param>
+            <c:url var="declineLink" value="ManagerActiveServlet">
+                <c:param name="command" value="DECLINE"></c:param>
+                <c:param name="leaveID" value="${tmpLeave.leaveId}"></c:param>
             </c:url>
 
             <tr>
-                <th scope="row">${tmpLeave.id}</th>
+                <th scope="row">${tmpLeave.leaveId}</th>
                 <td>${tmpLeave.employeeName}</td>
                 <td>${tmpLeave.employeeSurname}</td>
                 <td>${tmpLeave.startDate}</td>
@@ -75,10 +77,10 @@
                 <td>${tmpLeave.statusDate}</td>
                 <td>${tmpLeave.status}</td>
                 <td><a href="${acceptLink}">
-                    <button type="button" class="btn btn-success">Zaakceptuj</button>
+                    <button type="button" ${tmpLeave.hasDecision()?"":"disabled"} class="btn btn-${tmpLeave.hasDecision()?"success":"light"}">Zaakceptuj</button>
                 </a>
                     <a href="${declineLink}">
-                        <button type="button" class="btn btn-danger">Odrzuć</button>
+                        <button type="button" ${tmpLeave.hasDecision()?"":"disabled"} class="btn btn-${tmpLeave.hasDecision()?"danger":"light"}">Odrzuć</button>
                     </a></td>
             </tr>
 

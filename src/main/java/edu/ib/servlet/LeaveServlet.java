@@ -26,10 +26,22 @@ public class LeaveServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+
+
+        String editLeave=(String) request.getAttribute("leaveId");
+        RequestDispatcher dispatcher;
+        if(editLeave!=null){
+            request.setAttribute("leaveId",Integer.valueOf(editLeave));
+            request.setAttribute("startValue",request.getAttribute("startValue"));
+            request.setAttribute("endValue",request.getAttribute("endValue"));
+            dispatcher = request.getRequestDispatcher("/leave_form.jsp");
+        } else {
             session=request.getSession();
             session.removeAttribute("logger");
-            RequestDispatcher dispatcher=request.getRequestDispatcher("/index.html");
-            dispatcher.forward(request,response);
+            dispatcher = request.getRequestDispatcher("/index.html");
+        }
+        dispatcher.forward(request,response);
     }
 
     @Override
@@ -37,45 +49,96 @@ public class LeaveServlet extends HttpServlet {
         dbUtil= new DBUtilEmployee("employee","employeePass",url);
         session=request.getSession();
         Logger logger= (Logger) session.getAttribute("logger");
-        try {
-            int employeeId=logger.getEmployeeLoggedId();
-            LocalDate startDate=LocalDate.parse(request.getParameter("startDateInput"));
-            if(startDate.isBefore(LocalDate.now().plusDays(1))){
-                request.setAttribute("startError","Niepoprawna data początkowa");
-                throw new IllegalArgumentException("Illegal startDate");
+        String editLeave=request.getParameter("leaveId");
+        if(editLeave!=null && !editLeave.isEmpty()) editLeave=editLeave.substring(0,1);
+        if(editLeave==null || editLeave.isEmpty()) {
+            try {
+                int employeeId = logger.getEmployeeLoggedId();
+                LocalDate startDate = LocalDate.parse(request.getParameter("startDateInput"));
+                if (startDate.isBefore(LocalDate.now().plusDays(1))) {
+                    request.setAttribute("startError", "Niepoprawna data początkowa");
+                    throw new IllegalArgumentException("Illegal startDate");
+                }
+                LocalDate endDate = LocalDate.parse(request.getParameter("endDateInput"));
+                if (endDate.isBefore(startDate) || endDate.isBefore(LocalDate.now().plusDays(1))) {
+                    request.setAttribute("startError", "Niepoprawna data końcowa");
+                    throw new IllegalArgumentException("Illegal endDate");
+                }
+                dbUtil.addLeave(employeeId, startDate, endDate);
+                response.sendRedirect("EmployeeViewServlet");
+
+            } catch (IncorrectLoginPasswordException | NullPointerException e) {
+                e.printStackTrace();
+                request.setAttribute("otherError", "Zaloguj się ponownie!");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/leave_form.jsp");
+                dispatcher.forward(request, response);
+            } catch (DateTimeParseException e) {
+                e.printStackTrace();
+                request.setAttribute("otherError", "Błędny format daty początkowej lub końcowej!");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/leave_form.jsp");
+                dispatcher.forward(request, response);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                if (e.getSQLState().equals("45001")) {
+                    request.setAttribute("otherError", "Przekroczono liczbę dni urlopu!");
+                } else if (e.getSQLState().equals("45000")) {
+                    request.setAttribute("otherError", "Urlop na przełomie lat - stwórz 2 osobne wnioski o urlop");
+                } else {
+                    request.setAttribute("otherError", "Wystąpił błąd, spróbuj ponownie później");
+                }
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/leave_form.jsp");
+                dispatcher.forward(request, response);
+            } catch (IllegalArgumentException e) {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/leave_form.jsp");
+                dispatcher.forward(request, response);
             }
-            LocalDate endDate=LocalDate.parse(request.getParameter("endDateInput"));
-            if(endDate.isBefore(startDate) || endDate.isBefore(LocalDate.now().plusDays(1))){
-                request.setAttribute("startError","Niepoprawna data końcowa");
-                throw new IllegalArgumentException("Illegal endDate");
+        } else {
+            try {
+                logger.getEmployeeLoggedId();
+                LocalDate startDate = LocalDate.parse(request.getParameter("startDateInput"));
+                if (startDate.isBefore(LocalDate.now().plusDays(1))) {
+                    request.setAttribute("startError", "Niepoprawna data początkowa");
+                    request.setAttribute("leaveId",editLeave);
+                    throw new IllegalArgumentException("Illegal startDate");
+                }
+                LocalDate endDate = LocalDate.parse(request.getParameter("endDateInput"));
+                if (endDate.isBefore(startDate) || endDate.isBefore(LocalDate.now().plusDays(1))) {
+                    request.setAttribute("startError", "Niepoprawna data końcowa");
+                    request.setAttribute("leaveId",editLeave);
+                    throw new IllegalArgumentException("Illegal endDate");
+                }
+                dbUtil.changeLeaveState(Integer.parseInt(editLeave),8);
+                //RequestDispatcher dispatcher = request.getRequestDispatcher("EmployeeViewServlet");
+                response.sendRedirect("EmployeeViewServlet");
+            } catch (IncorrectLoginPasswordException | NullPointerException e) {
+                e.printStackTrace();
+                request.setAttribute("otherError", "Zaloguj się ponownie!");
+                request.setAttribute("leaveId",editLeave);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/leave_form.jsp");
+                dispatcher.forward(request, response);
+            } catch (DateTimeParseException e) {
+                e.printStackTrace();
+                request.setAttribute("otherError", "Błędny format daty początkowej lub końcowej!");
+                request.setAttribute("leaveId",editLeave);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/leave_form.jsp");
+                dispatcher.forward(request, response);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                request.setAttribute("leaveId",editLeave);
+                if (e.getSQLState().equals("450001")) {
+                    request.setAttribute("otherError", "Przekroczono liczbę dni urlopu!");
+                } else if (e.getSQLState().equals("450000")) {
+                    request.setAttribute("otherError", "Urlop na przełomie lat - stwórz 2 osobne wnioski o urlop");
+                } else {
+                    request.setAttribute("otherError", "Wystąpił błąd, spróbuj ponownie później");
+                }
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/leave_form.jsp");
+                dispatcher.forward(request, response);
+            } catch (IllegalArgumentException e) {
+                request.setAttribute("leaveId",editLeave);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/leave_form.jsp");
+                dispatcher.forward(request, response);
             }
-            dbUtil.addLeave(employeeId,startDate,endDate);
-            RequestDispatcher dispatcher=request.getRequestDispatcher("leaves_employee_view.jsp");
-            dispatcher.forward(request,response);
-        } catch (IncorrectLoginPasswordException | NullPointerException e) {
-            e.printStackTrace();
-            request.setAttribute("otherError","Zaloguj się ponownie!");
-            RequestDispatcher dispatcher=request.getRequestDispatcher("/leave_form.jsp");
-            dispatcher.forward(request,response);
-        } catch (DateTimeParseException e){
-            e.printStackTrace();
-            request.setAttribute("otherError","Błędny format daty początkowej lub końcowej!");
-            RequestDispatcher dispatcher=request.getRequestDispatcher("/leave_form.jsp");
-            dispatcher.forward(request,response);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            if(e.getSQLState().equals("450001")) {
-                request.setAttribute("otherError", "Przekroczono liczbę dni urlopu!");
-            } else if(e.getSQLState().equals("450000")){
-                request.setAttribute("otherError","Urlop na przełomie lat - stwórz 2 osobne wnioski o urlop");
-            } else  {
-                request.setAttribute("otherError","Wystąpił błąd, spróbuj ponownie później");
-            }
-            RequestDispatcher dispatcher=request.getRequestDispatcher("/leave_form.jsp");
-            dispatcher.forward(request,response);
-        } catch (IllegalArgumentException e){
-            RequestDispatcher dispatcher=request.getRequestDispatcher("/leave_form.jsp");
-            dispatcher.forward(request,response);
         }
     }
 }

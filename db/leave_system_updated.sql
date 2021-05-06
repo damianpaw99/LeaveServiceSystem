@@ -6,7 +6,7 @@ USE leave_system;
 CREATE TABLE employees(
 id INT AUTO_INCREMENT PRIMARY KEY,
 firstname VARCHAR(50),
-surname VARCHAR(50),
+surnamechangeLeaveState VARCHAR(50),
 date_of_birth DATE,
 email VARCHAR(50),
 years_of_employment INT);
@@ -83,11 +83,11 @@ RETURNS INT
 DETERMINISTIC
 BEGIN
 
-DECLARE leaves_submitted_and_imposed INT DEFAULT 0;
+DECLARE leaves_submitted INT;
 DECLARE leaves_cancelled INT DEFAULT 0;
 DECLARE leaves_sum INT DEFAULT 0;
 
-SELECT sum(DATEDIFF(lt.end_date, lt.start_date))+count(*) INTO leaves_submitted_and_imposed
+SELECT sum(DATEDIFF(lt.end_date, lt.start_date))+count(*) INTO leaves_submitted
 FROM leaves_table lt
 JOIN leave_has_status lhs
 ON lt.id=lhs.leave_id
@@ -102,11 +102,11 @@ WHERE lt.employee_id=input_id AND (lhs.status_id=5 OR lhs.status_id=3 or lhs.sta
 if isnull(leaves_cancelled) then
 	set leaves_cancelled=0;
 end if;
-if isnull(leaves_submitted_and_imposed) then
-	set leaves_submitted_and_imposed=0;
+if isnull(leaves_submitted) then
+	set leaves_submitted=0;
 end if;
 
-SET leaves_sum=leaves_submitted_and_imposed-leaves_cancelled;
+set leaves_sum=leaves_submitted-leaves_cancelled;
 if isnull(leaves_sum) then
 	set leaves_sum=0;
 end if;
@@ -121,8 +121,8 @@ deterministic
 begin
 declare s_id int default -1;
 declare last_status_date datetime;
-select max(status_date) into last_status_date from leave_has_status where l_id=leave_id;
-select status_id into s_id from leave_has_status where l_id=leave_id and status_date=last_status_date;
+select max(status_date) into last_status_date from leave_has_status where l_id=leave_id limit 1;
+select status_id into s_id from leave_has_status where l_id=leave_id and status_date=last_status_date limit 1;
 return s_id;
 end$$
 delimiter ;
@@ -131,13 +131,18 @@ delimiter ;
 -- procedura dodająca pracownika do systemu
 DELIMITER //
 CREATE PROCEDURE add_employee(IN input_name VARCHAR(50), IN input_surname VARCHAR(50), IN input_birth DATE, IN input_email VARCHAR(50), IN input_years_employment INT, 
-IN input_log VARCHAR(20), IN input_pass VARCHAR(255))
+IN input_log VARCHAR(20), IN input_pass VARCHAR(255)) 
 BEGIN
-
+declare check_login boolean default false;
 DECLARE new_employee_id INT;
-INSERT INTO employees(firstname, surname, date_of_birth, email, years_of_employment) values (input_name, input_surname, input_birth, input_email, input_years_employment);
-SELECT id e INTO new_employee_id FROM employees e ORDER BY id desc limit 1; 
-INSERT INTO logins(employee_id, login, pass) VALUES (new_employee_id, input_log, input_pass);
+select true into check_login from logins where login=input_log;
+if check_login=true then
+	signal sqlstate '45002' set message_text='Login is already in database';
+else
+	INSERT INTO employees(firstname, surname, date_of_birth, email, years_of_employment) values (input_name, input_surname, input_birth, input_email, input_years_employment);
+	SELECT id e INTO new_employee_id FROM employees e ORDER BY id desc limit 1; 
+	INSERT INTO logins(employee_id, login, pass) VALUES (new_employee_id, input_log, input_pass);
+end if;
 END //
 DELIMITER ;
 
@@ -182,15 +187,9 @@ DELIMITER ;
 delimiter $$
 create procedure changeLeaveState(in l_id int,in state int)
 begin
-#('submitted'), -- 1 wniosek o urlop złożony
-#('accepted'), -- 2 wniosek o urlop zaakceptowany
-#('rejected'), -- 3 wniosek o urlop odrzucony
-#('for_cancelation'), -- 4 złożono wniosek o anulowanie urlopu
-#('cancelled'), -- 5 urlop anulowany
-#('cancellation_rejected'), -- 6 wniosek o anulowanie urlopu odrzucony
-#('withdrawn')#, -- 7 wniosek o urlop wycofany (przed podjęciem przez kierownictwo jakichkolwiek decyzji po złożeniu wniosku o urlop)
+
 declare newest int default newest_state(l_id);
-if((newest=1 and (state=2 or state=3 or state=7)) or (newest=2 and (state=4 or state=5)) or (newest=4 and (state=5 or state=6)))
+if((newest=1 and (state=2 or state=3 or state=7)) or (newest=2 and (state=4 or state=5 or state=8)) or (newest=4 and (state=5 or state=6)))
 or (newest=8 and(state=9 or state=10))
 then
 	insert into leave_has_status(leave_id,status_id,status_date) values (l_id,state,now());
@@ -235,4 +234,18 @@ FROM employees e
 JOIN leaves_table lt ON e.id=lt.employee_id
 JOIN leave_has_status lhs ON lt.id=lhs.leave_id
 JOIN statuses s ON lhs.status_id=s.id
-WHERE lhs.status_id='1' OR lhs.status_id='4' or lhs.status_id='8';
+WHERE (lhs.status_id='1' OR lhs.status_id='4' or lhs.status_id='8') and s.id=newest_state(lt.id);
+
+
+create view all_employees as
+select id as 'id',
+firstname as 'name',
+surname as 'surname',
+date_of_birth as 'birthDate',
+email as 'email',
+years_of_employment as 'employmentYears'
+from employees;
+
+
+grant select on all_employees to 'manager'@'localhost';
+grant execute on procedure changeLeaveState to 'manager'@'localhost';

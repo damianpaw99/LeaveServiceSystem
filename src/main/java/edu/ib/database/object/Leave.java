@@ -100,15 +100,11 @@ public class Leave implements DatabaseMappable {
 
 
     public boolean isEmployeeDeletable(){
-        if(startDate.isAfter(LocalDate.now().plusDays(2)) && (status.equals("Złożony") || status.equals("Zaakceptowany"))){
-            return true;
-        } else {
-            return false;
-        }
+        return (startDate.isAfter(LocalDate.now().plusDays(2)) &&  status.equals("Zaakceptowany")) || status.equals("Złożony");
     }
 
     public boolean isEditable(){
-        return startDate.isBefore(LocalDate.now().plusDays(2)) && (status.equals("Zaakceptowany"));
+        return startDate.isAfter(LocalDate.now().plusDays(2)) && (status.equals("Zaakceptowany"));
     }
 
     public boolean hasDecision(){

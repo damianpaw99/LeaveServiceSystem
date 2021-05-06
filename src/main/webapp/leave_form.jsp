@@ -61,36 +61,42 @@
             <%--            <p class="text-info">Pozostało ci ${tutaj.liczba.dni} dni urlopu do wykorzystania.</p>--%>
 
             <form action="LeaveServlet" method="post">
-
+            <input type="hidden" name="leaveId" value="<%
+            if(request.getAttribute("leaveId")!=null) {out.println(request.getAttribute("leaveId"));}
+            %>">
 
                 <%
                     String sStart = (String) request.getAttribute("startError");
+                    String startValue = (String) request.getAttribute("startValue");
+                    if(startValue==null) startValue= request.getParameter("startDateInput")!=null ? request.getParameter("startDateInput"): "";
                     if (sStart != null) {
                         out.println("                <div class=\"form-group has-danger\">\n" +
                                 "                    <label class=\"form-control-label\" for=\"wrongStartDate\">Dzień rozpoczęcia</label>\n" +
-                                "                    <input type=\"date\" value=\"${param.startDateInput!=null ? param.startDateInput:\"\"}\" class=\"form-control is-invalid\" id=\"wrongStartDate\" name=\"startDateInput\">\n" +
+                                "                    <input type=\"date\" value=\""+startValue+"\" class=\"form-control is-invalid\" id=\"wrongStartDate\" name=\"startDateInput\">\n" +
                                 "                    <div class=\"invalid-feedback\">" + sStart + "</div>\n" +
                                 "                </div>");
                     } else {
                         out.println("                <div class=\"form-group\">\n" +
                                 "                    <label for=\"startDate\">Dzień rozpoczęcia</label>\n" +
-                                "                    <input type=\"date\" class=\"form-control\" value=\"${param.startDateInput!=null ? param.startDateInput:\"\"}\" name=\"startDateInput\" id=\"startDate\">\n" +
+                                "                    <input type=\"date\" class=\"form-control\" value=\""+startValue+"\" name=\"startDateInput\" id=\"startDate\">\n" +
                                 "                </div>");
                     }
                 %>
 
                 <%
                     String sEnd = (String) request.getAttribute("endError");
+                    String endValue = (String) request.getAttribute("endValue");
+                    if(endValue==null) endValue= request.getParameter("endDateInput")!=null ? request.getParameter("endDateInput"): "";
                     if (sEnd != null) {
                         out.println("                <div class=\"form-group has-danger\">\n" +
                                 "                    <label class=\"form-control-label\" for=\"wrongEndDate\">Dzień zakończenia</label>\n" +
-                                "                    <input type=\"text\" value=\"${param.endDateInput!=null ? param.endDateInput:\"\"}\" class=\"form-control is-invalid\" name=\"endDateInput\" id=\"wrongEndDate\">\n" +
+                                "                    <input type=\"text\" value=\""+endValue+"\" class=\"form-control is-invalid\" name=\"endDateInput\" id=\"wrongEndDate\">\n" +
                                 "                    <div class=\"invalid-feedback\">" + sEnd + "</div>\n" +
                                 "                </div>");
                     } else {
                         out.println("                <div class=\"form-group\">\n" +
                                 "                    <label for=\"endDate\">Dzień zakończenia</label>\n" +
-                                "                    <input type=\"date\" class=\"form-control\" value=\"${param.endDateInput!=null ? param.endDateInput:\"\"}\" name=\"endDateInput\" id=\"endDate\">\n" +
+                                "                    <input type=\"date\" class=\"form-control\" value=\""+endValue+"\" name=\"endDateInput\" id=\"endDate\">\n" +
                                 "                </div>");
                     }
                 %>

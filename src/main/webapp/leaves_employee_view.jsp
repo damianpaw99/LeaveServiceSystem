@@ -74,12 +74,12 @@
 
                 <td><a href="${tmpLeave.isEditable() ? updateLink :""}">
 
-                    <button type="button" ${tmpLeave.isEditable()?"":"disabled"} class="btn btn-warning ${tmpLeave.isEditable()?"":"disabled"}">Modyfikuj</button>
+                    <button type="button" ${tmpLeave.isEditable()?"":"disabled"} class="btn btn-${tmpLeave.isEditable()?"warning":"light"} ${tmpLeave.isEditable()?"":"disabled"}">Modyfikuj</button>
 
                 </a></td>
                 <td><a href="${tmpLeave.isEmployeeDeletable() ? deleteLink :""}"
                     onclick="if(!(confirm('Czy na pewno chcesz anulować urlop?'))) return false">
-                     <button type="button" ${tmpLeave.isEmployeeDeletable()?"":"disabled"} class="btn btn-danger ${tmpLeave.isEmployeeDeletable()?"":"disabled"}">Anuluj</button>
+                     <button type="button" ${tmpLeave.isEmployeeDeletable()?"":"disabled"} class="btn btn-${tmpLeave.isEmployeeDeletable()?"danger":"light"} ${tmpLeave.isEmployeeDeletable()?"":"disabled"}">Anuluj</button>
 
              </a></td>
 

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @WebServlet("/EmployeeViewServlet")
@@ -55,10 +56,17 @@ public class EmployeeViewServlet extends HttpServlet {
                 Logger logger=(Logger) session.getAttribute("logger");
                 int employeeId = logger.getEmployeeLoggedId();
                 int leaveId = Integer.parseInt(request.getParameter("leaveID"));
+                Leave leave=dbUtil.getEmployeeLeave(employeeId,leaveId);
+
                 if (command.equals("EDIT")) {
+                    request.setAttribute("startValue",leave.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                    request.setAttribute("endValue", leave.getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                    request.setAttribute("leaveId",String.valueOf(leave.getLeaveId()));
+                    RequestDispatcher dispatcher=request.getRequestDispatcher("LeaveServlet");
+                    dispatcher.forward(request,response);
 
                 } else if (command.equals("CANCEL")) {
-                    Leave leave=dbUtil.getEmployeeLeave(employeeId,leaveId);
+
                     if(leave.getStatus().equals("Złożony")){
                         dbUtil.changeLeaveState(leaveId,7);
                     } else {

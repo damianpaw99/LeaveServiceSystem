@@ -21,16 +21,18 @@
         <div class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="employees_manager_view.jsp">Pracownicy</a>
+                    <a class="nav-link" href="AllEmployeesServlet">Pracownicy</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="leaves_manager_view.jsp">Wszystkie urlopy</a>
+                    <a class="nav-link" href="ManagerAllServlet">Wszystkie urlopy</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="active_leaves_view.jsp">Wnioski do rozpatrzenia</a>
+                    <a class="nav-link" href="ManagerActiveServlet">Wnioski do rozpatrzenia</a>
                 </li>
             </ul>
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Wyloguj</button>
+            <form action="ManagerAllServlet" method="get">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit" name="command" value="LOG OUT">Wyloguj</button>
+            </form>
         </div>
     </nav>
 </header>
@@ -52,16 +54,16 @@
 
         <tbody>
 
-        <c:forEach var="tmpLeave" items="${LEAVES_LIST}">
+        <c:forEach var="tmpEmployee" items="${EMPLOYEE_LIST}">
 
 
             <tr>
-                <th scope="row">${tmpLeave.id}</th>
-                <td>${tmpLeave.name}</td>
-                <td>${tmpLeave.surname}</td>
-                <td>${tmpLeave.birthDate}</td>
-                <td>${tmpLeave.email}</td>
-                <td>${tmpLeave.employmentYears}</td>
+                <th scope="row">${tmpEmployee.id}</th>
+                <td>${tmpEmployee.name}</td>
+                <td>${tmpEmployee.surname}</td>
+                <td>${tmpEmployee.birthDate}</td>
+                <td>${tmpEmployee.email}</td>
+                <td>${tmpEmployee.employmentYears}</td>
             </tr>
 
         </c:forEach>

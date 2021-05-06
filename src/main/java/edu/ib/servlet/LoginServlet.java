@@ -35,10 +35,12 @@ public class LoginServlet extends HttpServlet {
             if(!validate(login,request.getParameter("passwordInput"))){
                 throw new IncorrectLoginPasswordException("");
             }
+            dbUtil=new DBUtil(login,request.getParameter("passwordInput"),url);
+            session.setAttribute("dbUtil",dbUtil);
+            //RequestDispatcher dispatcher=request.getRequestDispatcher("ManagerAllServlet");
 
-            RequestDispatcher dispatcher=request.getRequestDispatcher("/leaves_manager_view.jsp");
-
-            dispatcher.forward(request,response);
+            //dispatcher.forward(request,response);
+            response.sendRedirect("ManagerAllServlet");
 
         } catch(IncorrectLoginPasswordException e){
 

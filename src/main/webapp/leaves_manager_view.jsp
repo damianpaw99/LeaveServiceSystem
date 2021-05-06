@@ -14,23 +14,27 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="active_leaves_view.jsp">BiteOfRest</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+                    aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
         <div class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="employees_manager_view.jsp">Pracownicy</a>
+                    <a class="nav-link" href="AllEmployeesServlet">Pracownicy</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="leaves_manager_view.jsp">Wszystkie urlopy</a>
+                    <a class="nav-link" href="ManagerAllServlet">Wszystkie urlopy</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="active_leaves_view.jsp">Wnioski do rozpatrzenia</a>
+                    <a class="nav-link" href="ManagerActiveServlet">Wnioski do rozpatrzenia</a>
                 </li>
             </ul>
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Wyloguj</button>
+            <form action="ManagerAllServlet" method="get">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit" name="command" value="LOG OUT">Wyloguj</button>
+            </form>
         </div>
     </nav>
 </header>
@@ -41,13 +45,13 @@
 
         <thead>
         <tr class="table-active">
-            <th scope="col" >#</th>
-            <th scope="col" >Imię pracownika</th>
-            <th scope="col" >Nazwisko pracownika</th>
-            <th scope="col" >Data rozpoczecia</th>
-            <th scope="col" >Data zakończenia</th>
-            <th scope="col" >Zmiana statusu</th>
-            <th scope="col" >Status</th>
+            <th scope="col">#</th>
+            <th scope="col">Imię pracownika</th>
+            <th scope="col">Nazwisko pracownika</th>
+            <th scope="col">Data rozpoczecia</th>
+            <th scope="col">Data zakończenia</th>
+            <th scope="col">Zmiana statusu</th>
+            <th scope="col">Status</th>
         </tr>
         </thead>
         <tbody>
