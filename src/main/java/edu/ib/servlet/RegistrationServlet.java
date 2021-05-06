@@ -71,6 +71,7 @@ public class RegistrationServlet extends HttpServlet {
                     break;
                 case 5:
                     request.setAttribute("birthError","Błędna data urodzenia");
+                    break;
                 default:
                     throw new ServletException(e);
             }

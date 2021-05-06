@@ -37,7 +37,7 @@
             <form action="EmployeeViewServlet" method="get" class="d-flex">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link">Zalogowano jako </a>
+                        <a class="nav-link">Zalogowano jako ${sessionScope.employeeLogin}</a>
                     </li>
                 </ul>
                 <button class="btn btn-secondary my-2 my-sm-0" type="submit" name="method" value="LOG OUT"  onclick="if(!(confirm('Czy na pewno chcesz się wylogować?'))) return false">Wyloguj</button>

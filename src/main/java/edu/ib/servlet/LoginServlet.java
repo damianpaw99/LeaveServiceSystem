@@ -49,6 +49,7 @@ public class LoginServlet extends HttpServlet {
                 dbUtil=new DBUtil("logger","loggerPass",url);
                 Logger logger=new Logger(dbUtil,login);
                 logger.logIn(Logger.hash(request.getParameter("passwordInput")));
+                session.setAttribute("employeeLogin",login);
                 session.setAttribute("logger",logger);
 
                 //RequestDispatcher dispatcher=request.getRequestDispatcher("EmployeeViewServlet");
