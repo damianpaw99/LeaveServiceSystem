@@ -26,6 +26,7 @@ public class Employee implements DatabaseMappable {
         this.id = id;
         this.name = name;
         this.surname = surname;
+        if(birthDate.isAfter(LocalDate.now())) throw new EmployeeException("Wrong date"+birthDate.toString(),5);
         this.birthDate = birthDate;
         this.email = email;
         this.employmentYears = employmentYears;
@@ -62,7 +63,8 @@ public class Employee implements DatabaseMappable {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
+    public void setBirthDate(LocalDate birthDate) throws EmployeeException {
+        if(birthDate.isAfter(LocalDate.now())) throw new EmployeeException("Wrong date"+birthDate.toString(),5);
         this.birthDate = birthDate;
     }
 

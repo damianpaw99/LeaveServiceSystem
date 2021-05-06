@@ -39,7 +39,7 @@
                         <a class="nav-link">Zalogowano jako </a>
                     </li>
                 </ul>
-                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Wyloguj</button>
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit"  onclick="if(!(confirm('Czy na pewno chcesz się wylogować?'))) return false">Wyloguj</button>
             </form>
         </div>
     </nav>

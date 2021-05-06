@@ -19,7 +19,7 @@
 
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="leaves_employee_view.jsp">BiteOfRest</a>
+        <a class="navbar-brand" href="EmployeeViewServlet">BiteOfRest</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
                 aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -40,7 +40,7 @@
                         <a class="nav-link">Zalogowano jako </a>
                     </li>
                 </ul>
-                <button class="btn btn-secondary my-2 my-sm-0" type="submit" name="method" value="LOG OUT">Wyloguj</button>
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit" name="method" value="LOG OUT"  onclick="if(!(confirm('Czy na pewno chcesz się wylogować?'))) return false">Wyloguj</button>
             </form>
         </div>
     </nav>

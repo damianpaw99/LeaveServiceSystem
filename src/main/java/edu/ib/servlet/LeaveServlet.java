@@ -103,7 +103,7 @@ public class LeaveServlet extends HttpServlet {
                 }
                 LocalDate endDate = LocalDate.parse(request.getParameter("endDateInput"));
                 if (endDate.isBefore(startDate) || endDate.isBefore(LocalDate.now().plusDays(1))) {
-                    request.setAttribute("startError", "Niepoprawna data końcowa");
+                    request.setAttribute("endError", "Niepoprawna data końcowa");
                     request.setAttribute("leaveId",editLeave);
                     throw new IllegalArgumentException("Illegal endDate");
                 }

@@ -43,7 +43,7 @@
                         <a class="nav-link">Zalogowano jako kierownik </a>
                     </li>
                 </ul>
-                <button class="btn btn-secondary my-2 my-sm-0" type="submit" name="command" value="LOG OUT">Wyloguj</button>
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit" name="command" value="LOG OUT" onclick="if(!(confirm('Czy na pewno chcesz się wylogować?'))) return false">Wyloguj</button>
             </form>
         </div>
     </nav>

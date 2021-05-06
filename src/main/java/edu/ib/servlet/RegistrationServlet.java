@@ -36,16 +36,17 @@ public class RegistrationServlet extends HttpServlet {
             employee.setBirthDate(LocalDate.parse(request.getParameter("inputBirth")));
             employee.setEmploymentYears(Integer.valueOf(request.getParameter("inputSeniority")));
             String login=request.getParameter("loginInput");
+            if(login.isEmpty()) throw new IllegalArgumentException("Empty login");
             String pass= Logger.hash(request.getParameter("passwordInput"));
             String pass1=Logger.hash(request.getParameter("repeatPassword"));
-            if(pass.isEmpty()) throw new IllegalArgumentException("Empty password");
+            if(pass.equals(Logger.hash(""))) throw new IllegalArgumentException("Empty password");
             if (!pass.equals(pass1)) throw new IllegalArgumentException("Password are not the same");
 
             dbUtil.addEmployee(employee.getName(),employee.getSurname(),employee.getBirthDate(), employee.getEmail(),employee.getEmploymentYears(),login,pass);
             pass="";
             pass1="";
 
-            RequestDispatcher dispatcher=request.getRequestDispatcher("/index.html");
+            RequestDispatcher dispatcher=request.getRequestDispatcher("/login.jsp");
             dispatcher.forward(request,response);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -68,6 +69,8 @@ public class RegistrationServlet extends HttpServlet {
                 case 4:
                     request.setAttribute("yearsError","Błędna wartość lat pracy");
                     break;
+                case 5:
+                    request.setAttribute("birthError","Błędna data urodzenia");
                 default:
                     throw new ServletException(e);
             }
@@ -82,6 +85,8 @@ public class RegistrationServlet extends HttpServlet {
         } catch(IllegalArgumentException e){
             if(e.getMessage().equals("Empty password")){
                 request.setAttribute("mainPasswordError","Hasło nie może być puste!");
+            } else if(e.getMessage().equals("Empty login")){
+                request.setAttribute("loginError","Login nie może być pusty!");
             } else {
                 request.setAttribute("passwordError", "Hasła nie są identyczne!");
             }

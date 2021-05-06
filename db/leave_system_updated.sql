@@ -165,7 +165,7 @@ end if;
 
 select years_of_employment into employee_work_years from employees where id=input_employee_id;
 select leave_taken(input_employee_id,start_year) into used_days;
-set leave_days=datediff(input_start, input_end);
+set leave_days=datediff(input_end, input_start);
 
 if employee_work_years>=10 then
 	if used_days+leave_days<=26 then
