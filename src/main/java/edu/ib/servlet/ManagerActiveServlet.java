@@ -25,8 +25,8 @@ public class ManagerActiveServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         session = request.getSession();
-        DBUtil db = (DBUtil) session.getAttribute("dbUtil");
-        dbUtil = new DBUtilManager(db.getLogin(), db.getPassword(), url);
+
+        dbUtil = (DBUtilManager) session.getAttribute("dbUtil");
         String command = request.getParameter("command");
         if (command != null) {
 

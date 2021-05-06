@@ -3,6 +3,7 @@ package edu.ib.servlet;
 import edu.ib.IncorrectLoginPasswordException;
 import edu.ib.Logger;
 import edu.ib.database.DBUtil;
+import edu.ib.database.DBUtilManager;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -35,7 +36,7 @@ public class LoginServlet extends HttpServlet {
             if(!validate(login,request.getParameter("passwordInput"))){
                 throw new IncorrectLoginPasswordException("");
             }
-            dbUtil=new DBUtil(login,request.getParameter("passwordInput"),url);
+            dbUtil=new DBUtilManager(login,request.getParameter("passwordInput"),url);
             session.setAttribute("dbUtil",dbUtil);
             //RequestDispatcher dispatcher=request.getRequestDispatcher("ManagerAllServlet");
 

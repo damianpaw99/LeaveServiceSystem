@@ -29,8 +29,7 @@ public class ManagerAllServlet extends HttpServlet {
         session=request.getSession();
         String command=request.getParameter("command");
         if(command==null) {
-            DBUtil db = (DBUtil) session.getAttribute("dbUtil");
-            dbUtil = new DBUtilManager(db.getLogin(), db.getPassword(), url);
+            dbUtil = (DBUtilManager) session.getAttribute("dbUtil");
             try {
                 List<Leave> list = dbUtil.getAllLeaves();
                 request.setAttribute("LEAVES_LIST", list);

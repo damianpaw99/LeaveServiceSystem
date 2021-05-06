@@ -87,13 +87,13 @@ DECLARE leaves_submitted INT;
 DECLARE leaves_cancelled INT DEFAULT 0;
 DECLARE leaves_sum INT DEFAULT 0;
 
-SELECT sum(DATEDIFF(lt.end_date, lt.start_date))+count(*) INTO leaves_submitted
+SELECT sum(days_between(lt.end_date, lt.start_date)) INTO leaves_submitted
 FROM leaves_table lt
 JOIN leave_has_status lhs
 ON lt.id=lhs.leave_id
 WHERE lt.employee_id=input_id AND (lhs.status_id=1) and year(lt.start_date)=input_year;
 
-SELECT sum(DATEDIFF(lt.end_date, lt.start_date))+count(*) INTO leaves_cancelled
+SELECT sum(days_beetween(lt.end_date, lt.start_date)) INTO leaves_cancelled
 FROM leaves_table lt
 JOIN leave_has_status lhs
 ON lt.id=lhs.leave_id
@@ -266,4 +266,24 @@ grant execute on procedure add_employee to 'create'@'localhost';
 
 
 grant select on all_employees to 'manager'@'localhost';
+
 grant execute on procedure changeLeaveState to 'manager'@'localhost';
+delimiter $$
+
+create function days_between(date1 Date, date2 Date)
+returns int
+deterministic
+begin
+declare count int default 0;
+declare tempdate date default date1;
+
+while datediff(date2,tempdate)!=-1 do
+if(dayofweek(tempdate)=1 or dayofweek(tempdate)=7) then
+set count=count+1;
+end if;
+set tempdate=adddate(tempdate,interval 1 day);
+end while;
+return datediff(date2,date1)-count+1;
+end$$
+delimiter ;
+
