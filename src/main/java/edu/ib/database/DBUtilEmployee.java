@@ -49,7 +49,7 @@ public class DBUtilEmployee extends DBUtil {
 
             leavesList=leaveClassDatabaseMapper.getObject(resultSet);
 
-            leavesList.sort((o1, o2) -> o1.getId().compareTo(o2.getId()));
+            leavesList.sort((o1, o2) -> o2.getId().compareTo(o1.getId()));
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
