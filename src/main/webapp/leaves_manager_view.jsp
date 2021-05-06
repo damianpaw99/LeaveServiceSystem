@@ -1,10 +1,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java"
          import="java.util.*" %>
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <title>Wszystkie urlopy pracowników</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="shortcut icon" type="image/png" href="images/favicon.png"/>
     <link rel="stylesheet" href="css/bootstrap.css">
 </head>
@@ -32,7 +39,12 @@
                     <a class="nav-link" href="ManagerActiveServlet">Wnioski do rozpatrzenia</a>
                 </li>
             </ul>
-            <form action="ManagerAllServlet" method="get">
+            <form action="ManagerAllServlet" method="get" class="d-flex">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link">Zalogowano jako kierownik </a>
+                    </li>
+                </ul>
             <button class="btn btn-secondary my-2 my-sm-0" type="submit" name="command" value="LOG OUT">Wyloguj</button>
             </form>
         </div>
@@ -41,7 +53,7 @@
 
 <main>
 
-    <table class="table table-striped" style="font-size:14px; text-align:center;">
+    <table class="table table-hover" style="font-size:14px; text-align:center; vertical-align: center">
 
         <thead>
         <tr class="table-active">
@@ -60,13 +72,13 @@
 
 
             <tr>
-                <th scope="row">${tmpLeave.id}</th>
-                <td>${tmpLeave.employeeName}</td>
-                <td>${tmpLeave.employeeSurname}</td>
-                <td>${tmpLeave.startDate}</td>
-                <td>${tmpLeave.endDate}</td>
-                <td>${tmpLeave.statusDate}</td>
-                <td>${tmpLeave.status}</td>
+                <th scope="row" style="vertical-align: middle">${tmpLeave.id}</th>
+                <td style="vertical-align: middle">${tmpLeave.employeeName}</td>
+                <td style="vertical-align: middle">${tmpLeave.employeeSurname}</td>
+                <td style="vertical-align: middle">${tmpLeave.startDate}</td>
+                <td style="vertical-align: middle">${tmpLeave.endDate}</td>
+                <td style="vertical-align: middle">${tmpLeave.statusDate}</td>
+                <td style="vertical-align: middle">${tmpLeave.status}</td>
             </tr>
 
         </c:forEach>

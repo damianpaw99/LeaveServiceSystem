@@ -1,10 +1,16 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java"
          import="java.util.*" %>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <title>Urlopy</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="shortcut icon" type="image/png" href="images/favicon.png"/>
     <link rel="stylesheet" href="css/bootstrap.css">
 </head>
@@ -13,8 +19,9 @@
 
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="EmployeeViewServlet">BiteOfRest</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand" href="leaves_employee_view.jsp">BiteOfRest</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+                aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -27,9 +34,13 @@
                     <a class="nav-link" href="EmployeeViewServlet">Przeglądaj urlopy</a>
                 </li>
             </ul>
-            <form action="EmployeeViewServlet" method="get">
-                <input type="hidden" name="method" value="LOG OUT">
-                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Wyloguj</button>
+            <form action="EmployeeViewServlet" method="get" class="d-flex">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link">Zalogowano jako </a>
+                    </li>
+                </ul>
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit" name="method" value="LOG OUT">Wyloguj</button>
             </form>
         </div>
     </nav>
@@ -37,7 +48,7 @@
 
 <main>
 
-    <table class="table table-striped" style="font-size:14px; text-align:center;">
+    <table class="table table-hover" style="font-size:14px; text-align:center;">
 
         <thead>
         <tr class="table-secondary">
@@ -65,11 +76,11 @@
             </c:url>
 
             <tr>
-                <th scope="row">${tmpLeave.leaveId}</th>
-                <td>${tmpLeave.startDate}</td>
-                <td>${tmpLeave.endDate}</td>
-                <td>${tmpLeave.statusDate}</td>
-                <td>${tmpLeave.status}</td>
+                <th scope="row" style="vertical-align: middle">${tmpLeave.leaveId}</th>
+                <td style="vertical-align: middle">${tmpLeave.startDate}</td>
+                <td style="vertical-align: middle">${tmpLeave.endDate}</td>
+                <td style="vertical-align: middle">${tmpLeave.statusDate}</td>
+                <td style="vertical-align: middle">${tmpLeave.status}</td>
 
 
                 <td><a href="${tmpLeave.isEditable() ? updateLink :""}">
@@ -83,12 +94,6 @@
 
              </a></td>
 
-<%--                <td><a--%>
-<%--                    <button type="button" class="btn btn-warning disabled">Modyfikuj</button>--%>
-<%--                </a></td>--%>
-<%--                <td><a--%>
-<%--                    <button type="button" class="btn btn-danger disabled">Anuluj</button>--%>
-<%--                </a></td>--%>
             </tr>
 
         </c:forEach>
