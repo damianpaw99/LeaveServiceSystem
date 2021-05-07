@@ -8,6 +8,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class used by manager to communicate with database
+ */
 public class DBUtilManager extends DBUtil{
     /**
      * Base constructor
@@ -20,6 +23,11 @@ public class DBUtilManager extends DBUtil{
         super(login, password, url);
     }
 
+    /**
+     * Method getting list of all employees from database
+     * @return List of employees
+     * @throws SQLException Thrown when there was a problem with connection or database query
+     */
     public List<Employee> getAllEmployees() throws SQLException {
         List<Employee> employeeList=new ArrayList<>();
 
@@ -59,6 +67,11 @@ public class DBUtilManager extends DBUtil{
         return employeeList;
     }
 
+    /**
+     * Method getting all leave from database
+     * @return List of leaves
+     * @throws SQLException Thrown when there was a problem with connection or database query
+     */
     public List<Leave> getAllLeaves() throws SQLException {
         List<Leave> leavesList=new ArrayList<>();
 
@@ -99,7 +112,11 @@ public class DBUtilManager extends DBUtil{
     }
 
 
-
+    /**
+     * Method getting list of list with which manager has to make a decision from database
+     * @return List of leaves to decide
+     * @throws SQLException Thrown when there was a problem with connection or database query
+     */
     public List<Leave> getToAcceptLeaves() throws SQLException {
         List<Leave> leavesList=new ArrayList<>();
 
@@ -139,6 +156,14 @@ public class DBUtilManager extends DBUtil{
         return leavesList;
 
     }
+
+    /**
+     * Method used to change state of leave by employee
+     * @param leaveId Leave id
+     * @param stateId New state id of leave (1-Zlozono; 2-Zaakceptowany; 3-Odrzucony; 4-Do anulacji; 5-Anulowany;
+     *                6-Anulowanie odrzucone; 7-Wycofany; 8-Do edycji; 9-Edytowany; 10-Edycja odrzucona)
+     * @throws SQLException Thrown when there was a problem with connection or database query
+     */
     public void changeLeaveState(int leaveId,int stateId) throws SQLException {
         Connection conn = null;
         PreparedStatement statement = null;
@@ -165,6 +190,12 @@ public class DBUtilManager extends DBUtil{
         }
     }
 
+    /**
+     * Method used to get leave from database
+     * @param leaveId Leave id
+     * @return Leave
+     * @throws SQLException Thrown when there was a problem with connection or database query
+     */
     public Leave getEmployeeLeave(int leaveId) throws SQLException {
         List<Leave> leavesList=new ArrayList<>();
 

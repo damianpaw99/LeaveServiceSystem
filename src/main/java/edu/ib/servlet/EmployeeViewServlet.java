@@ -4,6 +4,7 @@ import edu.ib.IncorrectLoginPasswordException;
 import edu.ib.Logger;
 import edu.ib.database.DBUtil;
 import edu.ib.database.DBUtilEmployee;
+import edu.ib.database.DBUtilManager;
 import edu.ib.database.object.Leave;
 
 import javax.servlet.RequestDispatcher;
@@ -18,15 +19,30 @@ import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * Servlet used to control leaves_employee_view.jsp
+ */
 @WebServlet("/EmployeeViewServlet")
 public class EmployeeViewServlet extends HttpServlet {
 
 
+    /**
+     * DButil used to communicate with database
+     */
     private DBUtilEmployee dbUtil;
+    /**
+     * Database url
+     */
+    private String url="jdbc:mysql://localhost:3306/leave_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=CET";;
+    /**
+     * Session object
+     */
     private HttpSession session;
-    private String url="jdbc:mysql://localhost:3306/leave_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=CET";
 
-
+    /**
+     * doGet
+     * Shows employee leave, logs out, edits on cancels leave base on "command" and "method"
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         dbUtil=new DBUtilEmployee("employee","employeePass",url);
@@ -85,6 +101,10 @@ public class EmployeeViewServlet extends HttpServlet {
         }
     }
 
+    /**
+     * doPost method
+     * The same as doGet
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request,response);

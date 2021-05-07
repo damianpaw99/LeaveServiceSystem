@@ -13,15 +13,35 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Class mapping data from resultSet (columns in resultSet name has to have the same name as T class fields)
+ * @param <T> Class to which object will be mapped
+ */
 public class ClassDatabaseMapper<T extends DatabaseMappable> {
-
+    /**
+     * Class to which object will be mapped
+     */
     private Class<T> tClass;
 
+    /**
+     * Basic constructor
+     * @param tClass Class to which object will be mapped
+     */
     public ClassDatabaseMapper(Class<T> tClass){
         if(tClass==null) throw new NullPointerException("tClass can't be null");
         this.tClass=tClass;
     }
 
+    /**
+     * Method creating List of T objects from resultSet
+     * @param resultSet Resultset with data from database
+     * @return List ob T objects
+     * @throws SQLException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     * @throws InstantiationException
+     * @throws NoSuchMethodException
+     */
     public List<T> getObject(ResultSet resultSet) throws SQLException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
         List<T> list=new ArrayList<>();
 

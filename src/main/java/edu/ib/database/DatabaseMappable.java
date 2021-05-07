@@ -1,4 +1,7 @@
 package edu.ib.database;
 
-public interface DatabaseMappable {
-}
+/**
+ * Interface used by ClassDatableMapper.
+ * It is used to declare that class which implements it, can be mapped by ClassDatableMapper.
+ */
+public interface DatabaseMappable{}

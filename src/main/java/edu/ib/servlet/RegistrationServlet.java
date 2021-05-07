@@ -39,7 +39,8 @@ public class RegistrationServlet extends HttpServlet {
             if(login.isEmpty()) throw new IllegalArgumentException("Empty login");
             String pass= Logger.hash(request.getParameter("passwordInput"));
             String pass1=Logger.hash(request.getParameter("repeatPassword"));
-            if(pass.equals(Logger.hash(""))) throw new IllegalArgumentException("Empty password");
+            if(pass.equals(Logger.hash(""))) throw new IllegalArgumentException("Empty main password");
+            if(pass1.equals(Logger.hash(""))) throw new IllegalArgumentException("Empty repeat password");
             if (!pass.equals(pass1)) throw new IllegalArgumentException("Password are not the same");
 
             dbUtil.addEmployee(employee.getName(),employee.getSurname(),employee.getBirthDate(), employee.getEmail(),employee.getEmploymentYears(),login,pass);
@@ -84,9 +85,11 @@ public class RegistrationServlet extends HttpServlet {
             RequestDispatcher dispatcher=request.getRequestDispatcher("/registration.jsp");
             dispatcher.forward(request,response);
         } catch(IllegalArgumentException e){
-            if(e.getMessage().equals("Empty password")){
+            if(e.getMessage().equals("Empty main password")){
                 request.setAttribute("mainPasswordError","Hasło nie może być puste!");
-            } else if(e.getMessage().equals("Empty login")){
+            } else if(e.getMessage().equals("Empty repeat password")) {
+                request.setAttribute("passwordError", "Hasło nie może być puste!");
+            }else if(e.getMessage().equals("Empty login")){
                 request.setAttribute("loginError","Login nie może być pusty!");
             } else {
                 request.setAttribute("passwordError", "Hasła nie są identyczne!");

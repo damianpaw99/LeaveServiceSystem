@@ -2,7 +2,9 @@ package edu.ib.database;
 
 import java.sql.*;
 
-
+/**
+ * Class containing base structures to communicate with database
+ */
 public class DBUtil {
 
     /**
@@ -71,6 +73,12 @@ public class DBUtil {
         }
     }
 
+    /**
+     * Method closing object used to communicating with database
+     * @param conn Connection object
+     * @param statement Statement object
+     * @param resultSet ResultSet object
+     */
     protected static void close(Connection conn, Statement statement, ResultSet resultSet) {
 
         try {
@@ -90,34 +98,66 @@ public class DBUtil {
 
     }
 
+    /**
+     * login getter
+     * @return Login
+     */
     public String getLogin() {
         return login;
     }
 
+    /**
+     * Login setter
+     * @param login Login
+     */
     public void setLogin(String login) {
         this.login = login;
     }
 
+    /**
+     * Password getter
+     * @return Password
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     * Password setter
+     * @param password Password
+     */
     public void setPassword(String password) {
         this.password = password;
     }
 
+    /**
+     * Url of database getter
+     * @return Url of database
+     */
     public String getUrl() {
         return url;
     }
 
+    /**
+     * Url of database setter
+     * @param url Url of database
+     */
     public void setUrl(String url) {
         this.url = url;
     }
 
+    /**
+     * Connection getter
+     * @return connection
+     */
     public Connection getConn() {
         return conn;
     }
 
+    /**
+     * Connection setter
+     * @param conn Connection
+     */
     public void setConn(Connection conn) {
         this.conn = conn;
     }

@@ -92,6 +92,11 @@ public class Logger {
         } else throw new IncorrectLoginPasswordException("Person is not logged in!");
     }
 
+    /**
+     * Method returning logged employee id if user has successfully logged in
+     * @return Employee id
+     * @throws IncorrectLoginPasswordException Thrown when user is not logged in
+     */
     public int getEmployeeLoggedId() throws IncorrectLoginPasswordException {
         if (loggedIn) {
             return employeeLoggedId;

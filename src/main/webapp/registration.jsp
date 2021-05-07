@@ -77,7 +77,7 @@
 
 
                     <%
-                        String sBirth = (String) request.getAttribute("dateError");
+                        String sBirth = (String) request.getAttribute("birthError");
                         String inputBirth=request.getParameter("inputBirth");
                         if(inputBirth==null){inputBirth="";}
                         if (sBirth != null) {

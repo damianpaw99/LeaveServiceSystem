@@ -16,14 +16,29 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Servlet used to control leaves_manager_view.jsp
+ */
 @WebServlet("/ManagerAllServlet")
 public class ManagerAllServlet extends HttpServlet {
 
+    /**
+     * DButil used to communicate with database
+     */
     private DBUtilManager dbUtil;
-    private String url="jdbc:mysql://localhost:3306/leave_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=CET";
+    /**
+     * Database url
+     */
+    private String url="jdbc:mysql://localhost:3306/leave_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=CET";;
+    /**
+     * Session object
+     */
     private HttpSession session;
 
-
+    /**
+     * doGet method
+     * Loads list of all leaves from database or logs out user based on "command"
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         session=request.getSession();
@@ -45,6 +60,10 @@ public class ManagerAllServlet extends HttpServlet {
         }
     }
 
+    /**
+     * doPost method
+     * The same as doGet method
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request,response);

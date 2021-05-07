@@ -1,5 +1,8 @@
 package edu.ib;
 
+/**
+ * Used by logger to signalise that login or password is incorrect
+ */
     public class IncorrectLoginPasswordException extends Exception {
 
         /**

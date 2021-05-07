@@ -15,13 +15,29 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Servlet used to control active_leaves_view.jsp
+ */
 @WebServlet("/ManagerActiveServlet")
 public class ManagerActiveServlet extends HttpServlet {
 
+    /**
+     * DButil used to communicate with database
+     */
     private DBUtilManager dbUtil;
-    private String url = "jdbc:mysql://localhost:3306/leave_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=CET";
+    /**
+     * Database url
+     */
+    private String url="jdbc:mysql://localhost:3306/leave_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=CET";;
+    /**
+     * Session object
+     */
     private HttpSession session;
 
+    /**
+     * doGet method
+     * Loads active leaves from database, changes change of leaves or logs out user based on "command"
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         session = request.getSession();
@@ -102,9 +118,4 @@ public class ManagerActiveServlet extends HttpServlet {
         }
     }
 
-        @Override
-        protected void doPost (HttpServletRequest request, HttpServletResponse response) throws
-        ServletException, IOException {
-
-        }
     }

@@ -13,14 +13,29 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * Servlet which controls employees_manager_view.jsp
+ */
 @WebServlet("/AllEmployeesServlet")
 public class AllEmployeesServlet extends HttpServlet {
 
-
+    /**
+     * DButil used to communicate with database
+     */
     private DBUtilManager dbUtil;
+    /**
+     * Database url
+     */
     private String url="jdbc:mysql://localhost:3306/leave_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=CET";;
+    /**
+     * Session object
+     */
     private HttpSession session;
 
+    /**
+     * doGet method
+     * Logs out manager or lists employees from database based on "command" parameter
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         session=request.getSession();
@@ -42,6 +57,10 @@ public class AllEmployeesServlet extends HttpServlet {
         }
     }
 
+    /**
+     * doPost method
+     * The same as doGet method
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request,response);

@@ -18,14 +18,31 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Servlet used to control login.jsp
+ */
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 
 
+    /**
+     * DButil used to communicate with database
+     */
     private DBUtil dbUtil;
+    /**
+     * Database url
+     */
+    private String url="jdbc:mysql://localhost:3306/leave_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=CET";;
+    /**
+     * Session object
+     */
     private HttpSession session;
-    private String url="jdbc:mysql://localhost:3306/leave_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=CET";
 
+    /**
+     * doPost method
+     * Tries to log in manager or employee, saves it in session object
+     * When logging in is failed creates error warnings and reloads page
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         session=request.getSession();
@@ -71,6 +88,12 @@ public class LoginServlet extends HttpServlet {
 
     }
 
+    /**
+     * Method used to check database login and password for manager
+     * @param name Login
+     * @param pass Password
+     * @return Boolean value if it was correct
+     */
     private boolean validate(String name, String pass) {
         boolean status = false;
 

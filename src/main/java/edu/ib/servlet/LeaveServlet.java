@@ -3,6 +3,7 @@ package edu.ib.servlet;
 import edu.ib.IncorrectLoginPasswordException;
 import edu.ib.Logger;
 import edu.ib.database.DBUtilEmployee;
+import edu.ib.database.DBUtilManager;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,14 +17,29 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
+/**
+ * Servlet used to control leave_form.jsp
+ */
 @WebServlet("/LeaveServlet")
 public class LeaveServlet extends HttpServlet {
 
+    /**
+     * DButil used to communicate with database
+     */
     private DBUtilEmployee dbUtil;
-    private String url="jdbc:mysql://localhost:3306/leave_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=CET";
+    /**
+     * Database url
+     */
+    private String url="jdbc:mysql://localhost:3306/leave_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=CET";;
+    /**
+     * Session object
+     */
     private HttpSession session;
 
-
+    /**
+     * doGet method
+     * Shows days left, loads values from form if there was and error/leave is edited and page is reloaded or logs out user based on "command"
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         session=request.getSession();
@@ -64,6 +80,11 @@ public class LeaveServlet extends HttpServlet {
         dispatcher.forward(request,response);
     }
 
+    /**
+     * doPost method
+     * Creates/edits new leave or reloads page with errors warnings
+     */
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         dbUtil= new DBUtilEmployee("employee","employeePass",url);
@@ -75,29 +96,60 @@ public class LeaveServlet extends HttpServlet {
             try {
                 int employeeId = logger.getEmployeeLoggedId();
                 LocalDate startDate = LocalDate.parse(request.getParameter("startDateInput"));
+                try {
+                    int id= logger.getEmployeeLoggedId();
+                    int days_left=dbUtil.daysLeft(id,LocalDate.now().getYear());
+                    request.setAttribute("daysLeft",days_left);
+                } catch (IncorrectLoginPasswordException | SQLException e) {
+                    e.printStackTrace();
+                }
                 if (startDate.isBefore(LocalDate.now().plusDays(1))) {
                     request.setAttribute("startError", "Niepoprawna data początkowa");
                     throw new IllegalArgumentException("Illegal startDate");
                 }
                 LocalDate endDate = LocalDate.parse(request.getParameter("endDateInput"));
                 if (endDate.isBefore(startDate) || endDate.isBefore(LocalDate.now().plusDays(1))) {
-                    request.setAttribute("startError", "Niepoprawna data końcowa");
+                    request.setAttribute("endError", "Niepoprawna data końcowa");
                     throw new IllegalArgumentException("Illegal endDate");
                 }
                 dbUtil.addLeave(employeeId, startDate, endDate);
                 response.sendRedirect("EmployeeViewServlet");
 
             } catch (IncorrectLoginPasswordException | NullPointerException e) {
+
+                try {
+                    int id= logger.getEmployeeLoggedId();
+                    int days_left=dbUtil.daysLeft(id,LocalDate.now().getYear());
+                    request.setAttribute("daysLeft",days_left);
+                } catch (IncorrectLoginPasswordException | SQLException er) {
+                    er.printStackTrace();
+                }
                 e.printStackTrace();
                 request.setAttribute("otherError", "Zaloguj się ponownie!");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/leave_form.jsp");
                 dispatcher.forward(request, response);
             } catch (DateTimeParseException e) {
+
+                try {
+                    int id= logger.getEmployeeLoggedId();
+                    int days_left=dbUtil.daysLeft(id,LocalDate.now().getYear());
+                    request.setAttribute("daysLeft",days_left);
+                } catch (IncorrectLoginPasswordException | SQLException er) {
+                    er.printStackTrace();
+                }
                 e.printStackTrace();
                 request.setAttribute("otherError", "Błędny format daty początkowej lub końcowej!");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/leave_form.jsp");
                 dispatcher.forward(request, response);
             } catch (SQLException e) {
+
+                try {
+                    int id= logger.getEmployeeLoggedId();
+                    int days_left=dbUtil.daysLeft(id,LocalDate.now().getYear());
+                    request.setAttribute("daysLeft",days_left);
+                } catch (IncorrectLoginPasswordException | SQLException er) {
+                    er.printStackTrace();
+                }
                 e.printStackTrace();
                 if (e.getSQLState().equals("45001")) {
                     request.setAttribute("otherError", "Przekroczono liczbę dni urlopu!");
@@ -109,6 +161,13 @@ public class LeaveServlet extends HttpServlet {
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/leave_form.jsp");
                 dispatcher.forward(request, response);
             } catch (IllegalArgumentException e) {
+                try {
+                    int id= logger.getEmployeeLoggedId();
+                    int days_left=dbUtil.daysLeft(id,LocalDate.now().getYear());
+                    request.setAttribute("daysLeft",days_left);
+                } catch (IncorrectLoginPasswordException | SQLException er) {
+                    er.printStackTrace();
+                }
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/leave_form.jsp");
                 dispatcher.forward(request, response);
             }
@@ -116,6 +175,13 @@ public class LeaveServlet extends HttpServlet {
             try {
                 logger.getEmployeeLoggedId();
                 LocalDate startDate = LocalDate.parse(request.getParameter("startDateInput"));
+                try {
+                    int id= logger.getEmployeeLoggedId();
+                    int days_left=dbUtil.daysLeft(id,LocalDate.now().getYear());
+                    request.setAttribute("daysLeft",days_left);
+                } catch (IncorrectLoginPasswordException | SQLException e) {
+                    e.printStackTrace();
+                }
                 if (startDate.isBefore(LocalDate.now().plusDays(1))) {
                     request.setAttribute("startError", "Niepoprawna data początkowa");
                     request.setAttribute("leaveId",editLeave);
@@ -131,18 +197,40 @@ public class LeaveServlet extends HttpServlet {
                 //RequestDispatcher dispatcher = request.getRequestDispatcher("EmployeeViewServlet");
                 response.sendRedirect("EmployeeViewServlet");
             } catch (IncorrectLoginPasswordException | NullPointerException e) {
+
+                try {
+                    int id= logger.getEmployeeLoggedId();
+                    int days_left=dbUtil.daysLeft(id,LocalDate.now().getYear());
+                    request.setAttribute("daysLeft",days_left);
+                } catch (IncorrectLoginPasswordException | SQLException er) {
+                    er.printStackTrace();
+                }
                 e.printStackTrace();
                 request.setAttribute("otherError", "Zaloguj się ponownie!");
                 request.setAttribute("leaveId",editLeave);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/leave_form.jsp");
                 dispatcher.forward(request, response);
             } catch (DateTimeParseException e) {
+                try {
+                    int id= logger.getEmployeeLoggedId();
+                    int days_left=dbUtil.daysLeft(id,LocalDate.now().getYear());
+                    request.setAttribute("daysLeft",days_left);
+                } catch (IncorrectLoginPasswordException | SQLException er) {
+                    er.printStackTrace();
+                }
                 e.printStackTrace();
                 request.setAttribute("otherError", "Błędny format daty początkowej lub końcowej!");
                 request.setAttribute("leaveId",editLeave);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/leave_form.jsp");
                 dispatcher.forward(request, response);
             } catch (SQLException e) {
+                try {
+                    int id= logger.getEmployeeLoggedId();
+                    int days_left=dbUtil.daysLeft(id,LocalDate.now().getYear());
+                    request.setAttribute("daysLeft",days_left);
+                } catch (IncorrectLoginPasswordException | SQLException er) {
+                    er.printStackTrace();
+                }
                 e.printStackTrace();
                 request.setAttribute("leaveId",editLeave);
                 if (e.getSQLState().equals("450001")) {
@@ -155,6 +243,13 @@ public class LeaveServlet extends HttpServlet {
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/leave_form.jsp");
                 dispatcher.forward(request, response);
             } catch (IllegalArgumentException e) {
+                try {
+                    int id= logger.getEmployeeLoggedId();
+                    int days_left=dbUtil.daysLeft(id,LocalDate.now().getYear());
+                    request.setAttribute("daysLeft",days_left);
+                } catch (IncorrectLoginPasswordException | SQLException er) {
+                    er.printStackTrace();
+                }
                 request.setAttribute("leaveId",editLeave);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/leave_form.jsp");
                 dispatcher.forward(request, response);
