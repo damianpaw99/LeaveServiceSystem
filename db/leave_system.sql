@@ -46,7 +46,12 @@ CREATE TABLE leave_has_status(
 leave_id INT, FOREIGN KEY (leave_id) REFERENCES leaves_table(id),
 status_id INT, FOREIGN KEY (status_id) REFERENCES statuses(id),
 status_date DATETIME);
-
+-- tabela przechowująca poprzednie daty po złożenie wniosku o edycję w celu możliwości ich przywrócenia
+create table leave_dates_backup(
+leave_id int, foreign key (leave_id) references leaves_table(id),
+start_date date,
+end_date date
+);
 
 -- FUNCTIONS ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -114,13 +119,13 @@ DECLARE last_status_date DATETIME;
 SELECT max(status_date) INTO last_status_date FROM leave_has_status WHERE l_id=leave_id LIMIT 1;
 SELECT status_id INTO s_id FROM leave_has_status WHERE l_id=leave_id AND status_date=last_status_date LIMIT 1;
 RETURN s_id;
-END$$
+END//
 DELIMITER ;
 
 -- funkcja sprawdzająca ilość dni roboczych pomiędzy dwoma datami
 DELIMITER //
 CREATE FUNCTION days_between(date1 DATE, date2 DATE)
-RETURN INT
+RETURNS INT
 DETERMINISTIC
 BEGIN
 DECLARE count INT DEFAULT 0;
@@ -133,13 +138,13 @@ END IF;
 SET tempdate=adddate(tempdate, INTERVAL 1 DAY);
 END WHILE;
 RETURN datediff(date2,date1)-count+1;
-END$$
+END//
 DELIMITER ;
 
 -- funkcja sprawdzająca ile dni urlopu pozostało praocwnikowi do pobrania w danym roku 
 DELIMITER //
 CREATE FUNCTION days_left(employee_id INT, input_year INT)
-RETURN INT
+RETURNS INT
 DETERMINISTIC
 BEGIN
 DECLARE test INT;
@@ -149,7 +154,7 @@ RETURN 20-leave_taken(employee_id, input_year);
 ELSE
 RETURN 26-leave_taken(employee_id, input_year);
 END IF;
-END$$
+END//
 DELIMITER ;
 
 
@@ -215,18 +220,53 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE changeLeaveState(IN l_id INT, IN state INT)
 BEGIN
-
 DECLARE newest INT DEFAULT newest_state(l_id);
-IF((newest=1 AND (state=2 OR state=3 OR state=7)) OR (newest=2 AND (state=4 OR state=5 OR state=8)) OR (newest=4 AND (state=5 OR state=6)))
-OR (newest=8 AND(state=9 OR state=10))
-THEN
+DECLARE s date;
+declare e date;
+if(newest=8 and state=10) then
+	INSERT INTO leave_has_status(leave_id,status_id,status_date) VALUES (l_id,state,now());
+    SELECT start_date, end_date INTO s,e FROM leave_dates_backup WHERE leave_id=l_id;
+    UPDATE leaves_table SET start_date=s,end_date=e;
+    DELETE FROM leave_dates_backup WHERE leave_id=l_id;
+elseif(newest=8 AND state=9) then
+	INSERT INTO leave_has_status(leave_id,status_id,status_date) VALUES (l_id,state,now());
+	delete from leave_dates_backup where leave_id=l_id;
+elseif((newest=1 AND (state=2 OR state=3 OR state=7)) OR (newest=2 AND (state=4 OR state=5 OR state=8)) OR (newest=4 AND (state=5 OR state=6))) THEN
 	INSERT INTO leave_has_status(leave_id,status_id,status_date) VALUES (l_id,state,now());
 ELSE
 	SIGNAL SQLSTATE '45002' SET MESSAGE_TEXT = 'Incorrect new status!';
 END IF;
-END$$
+END//
 DELIMITER ;
 
+delimiter //
+-- procedura zmieniająca daty dla urlopu
+create procedure change_dates(in leaveid int,in start_date_i date, in end_date_i date)
+begin
+declare before_start date;
+declare before_end date;
+declare before_leave_days int;
+declare new_leave_days int default days_between(start_date_i,end_date_i);
+declare days int default 0;
+declare employee int;
+declare l_year year;
+declare employee_years int;
+
+select employee_id, year(start_date), start_date, end_date into employee, l_year, before_start, before_end from leaves_table where leaveid=id;
+select years_of_employment into employee_years from employees where id=employee;
+set days=days_left(employee,l_year);
+set before_leave_days=days_between(before_start,before_end);
+set days=days+before_leave_days-new_leave_days;
+if days<0 then
+	signal sqlstate '45001' set message_text = 'Leave days in year exeeded!';
+else 
+	insert into leave_dates_backup(leave_id,start_date,end_date) values(leaveid, before_start, before_end);
+	update leaves_table set start_date=start_date_i, end_date=end_date_i where id=leaveid;
+	call changeLeaveState(leaveid,8);
+end if;
+end//
+
+delimiter ;
 
 -- TRIGGERS -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -237,9 +277,7 @@ AFTER INSERT
 ON leaves_table FOR EACH ROW
 BEGIN
 INSERT INTO leave_has_status(leave_id,status_id,status_date) VALUES (NEW.id,1,now());
-END$$
-DELIMITER ;
-
+END//
 
 -- VIEWS --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -287,6 +325,7 @@ grant execute on procedure changeLeaveState to 'employee'@'localhost';
 grant select on employees_leaves to 'employee'@'localhost';
 grant execute on procedure add_leave to 'employee'@'localhost';
 grant execute on function days_left to 'employee'@'localhost';
+grant execute on procedure change_dates to 'employee'@'localhost';
 
 create user 'manager'@'localhost' identified by 'managerPassword';
 grant execute on procedure changeLeaveState to 'manager'@'localhost';

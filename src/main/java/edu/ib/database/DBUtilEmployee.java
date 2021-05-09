@@ -224,5 +224,30 @@ public class DBUtilEmployee extends DBUtil {
         return out;
     }
 
+    public void change_dates(LocalDate startDate , LocalDate endDate, int leaveId) throws SQLException {
+        Connection conn = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+
+            // polaczenie z BD
+            conn = DriverManager.getConnection(url, login, password);
+
+            // zapytanie SELECT
+            String sql = "CALL change_dates(?,?, ?)";
+            statement = conn.prepareStatement(sql);
+            statement.setInt(1,leaveId);
+            statement.setDate(2, Date.valueOf(startDate));
+            statement.setDate(3,Date.valueOf(endDate));
+
+            // wykonanie zapytania SQL
+            statement.execute();
+
+        } finally {
+            // zamkniecie obiektow JDBC
+            close(conn, statement, resultSet);
+        }
+    }
 
 }

@@ -82,7 +82,7 @@ public class LeaveServlet extends HttpServlet {
 
     /**
      * doPost method
-     * Creates/edits new leave or reloads page with errors warnings
+     * Creates/edits leave or reloads page with errors warnings
      */
 
     @Override
@@ -96,6 +96,7 @@ public class LeaveServlet extends HttpServlet {
             try {
                 int employeeId = logger.getEmployeeLoggedId();
                 LocalDate startDate = LocalDate.parse(request.getParameter("startDateInput"));
+                LocalDate endDate = LocalDate.parse(request.getParameter("endDateInput"));
                 try {
                     int id= logger.getEmployeeLoggedId();
                     int days_left=dbUtil.daysLeft(id,LocalDate.now().getYear());
@@ -107,7 +108,7 @@ public class LeaveServlet extends HttpServlet {
                     request.setAttribute("startError", "Niepoprawna data początkowa");
                     throw new IllegalArgumentException("Illegal startDate");
                 }
-                LocalDate endDate = LocalDate.parse(request.getParameter("endDateInput"));
+
                 if (endDate.isBefore(startDate) || endDate.isBefore(LocalDate.now().plusDays(1))) {
                     request.setAttribute("endError", "Niepoprawna data końcowa");
                     throw new IllegalArgumentException("Illegal endDate");
@@ -175,6 +176,7 @@ public class LeaveServlet extends HttpServlet {
             try {
                 logger.getEmployeeLoggedId();
                 LocalDate startDate = LocalDate.parse(request.getParameter("startDateInput"));
+                LocalDate endDate = LocalDate.parse(request.getParameter("endDateInput"));
                 try {
                     int id= logger.getEmployeeLoggedId();
                     int days_left=dbUtil.daysLeft(id,LocalDate.now().getYear());
@@ -187,13 +189,13 @@ public class LeaveServlet extends HttpServlet {
                     request.setAttribute("leaveId",editLeave);
                     throw new IllegalArgumentException("Illegal startDate");
                 }
-                LocalDate endDate = LocalDate.parse(request.getParameter("endDateInput"));
+                
                 if (endDate.isBefore(startDate) || endDate.isBefore(LocalDate.now().plusDays(1))) {
                     request.setAttribute("endError", "Niepoprawna data końcowa");
                     request.setAttribute("leaveId",editLeave);
                     throw new IllegalArgumentException("Illegal endDate");
                 }
-                dbUtil.changeLeaveState(Integer.parseInt(editLeave),8);
+                dbUtil.change_dates(startDate,endDate,Integer.parseInt(editLeave));
                 //RequestDispatcher dispatcher = request.getRequestDispatcher("EmployeeViewServlet");
                 response.sendRedirect("EmployeeViewServlet");
             } catch (IncorrectLoginPasswordException | NullPointerException e) {
@@ -233,9 +235,9 @@ public class LeaveServlet extends HttpServlet {
                 }
                 e.printStackTrace();
                 request.setAttribute("leaveId",editLeave);
-                if (e.getSQLState().equals("450001")) {
+                if (e.getSQLState().equals("45001")) {
                     request.setAttribute("otherError", "Przekroczono liczbę dni urlopu!");
-                } else if (e.getSQLState().equals("450000")) {
+                } else if (e.getSQLState().equals("45000")) {
                     request.setAttribute("otherError", "Urlop na przełomie lat - stwórz 2 osobne wnioski o urlop");
                 } else {
                     request.setAttribute("otherError", "Wystąpił błąd, spróbuj ponownie później");
